@@ -13,14 +13,14 @@
 <meta property="og:site_name" content="gyc">
 <meta property="og:description" content="cropBox的使用CropBox 常用于点云立方体滤波">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/cropBox%E7%9A%84%E4%BD%BF%E7%94%A8.assets/image-20210308174026156.png">
-<meta property="og:image" content="http://example.com/cropBox%E7%9A%84%E4%BD%BF%E7%94%A8.assets/image-20210308174100329.png">
+<meta property="og:image" content="http://example.com/2021/05/27/PCL-cropBox-note/image-20210308174026156.png">
+<meta property="og:image" content="http://example.com/2021/05/27/PCL-cropBox-note/image-20210308174100329.png">
 <meta property="article:published_time" content="2021-05-27T15:01:40.000Z">
-<meta property="article:modified_time" content="2021-05-27T15:18:08.122Z">
+<meta property="article:modified_time" content="2021-05-27T15:23:21.104Z">
 <meta property="article:author" content="cyg">
 <meta property="article:tag" content="PCL">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/cropBox%E7%9A%84%E4%BD%BF%E7%94%A8.assets/image-20210308174026156.png">
+<meta name="twitter:image" content="http://example.com/2021/05/27/PCL-cropBox-note/image-20210308174026156.png">
   
     <link rel="alternate" href="/atom.xml" title="gyc" type="application/atom+xml">
   
@@ -121,13 +121,13 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pcl::CropBox&lt;pcl::PointXYZ&gt; box_filter;<span class="comment">//滤波器对象</span></span><br><span class="line">	minPoints = Eigen::<span class="built_in">Vector4f</span>(min_point_OBB.x,min_point_OBB.y*<span class="number">0.5</span>,min_point_OBB.z,<span class="number">1.0f</span>);</span><br><span class="line">	maxPoints = Eigen::<span class="built_in">Vector4f</span>(max_point_OBB.x, max_point_OBB.y*<span class="number">0.5</span>, max_point_OBB.z, <span class="number">1.0f</span>);</span><br><span class="line">	box_filter.<span class="built_in">setInputCloud</span>(cloud);</span><br><span class="line">	box_filter.<span class="built_in">setMin</span>(minPoints);<span class="comment">//在y方向上收缩了一半</span></span><br><span class="line">	box_filter.<span class="built_in">setMax</span>(maxPoints);</span><br><span class="line">	box_filter.<span class="built_in">setTranslation</span>(translasion);<span class="comment">//点在原始坐标系下的坐标</span></span><br><span class="line">	box_filter.<span class="built_in">setRotation</span>(eulerAngle2);<span class="comment">//rx,ry,rz</span></span><br><span class="line">	box_filter.<span class="built_in">setNegative</span>(<span class="literal">false</span>);<span class="comment">//保留OBB框内的点</span></span><br><span class="line">	box_filter.<span class="built_in">filter</span>(*flit);</span><br></pre></td></tr></table></figure>
 
 <p>4、结果</p>
-<p><img src="/cropBox%E7%9A%84%E4%BD%BF%E7%94%A8.assets/image-20210308174026156.png" alt="image-20210308174026156"></p>
-<p><img src="/cropBox%E7%9A%84%E4%BD%BF%E7%94%A8.assets/image-20210308174100329.png"></p>
+<p><img src="/2021/05/27/PCL-cropBox-note/image-20210308174026156.png"></p>
+<p><img src="/2021/05/27/PCL-cropBox-note/image-20210308174100329.png"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/05/27/PCL-cropBox-note/" data-id="ckp71jppg0000lwuhbiyg3rxw" data-title="PCL cropBox note" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/05/27/PCL-cropBox-note/" data-id="ckp71rgs00000h8uh1ich679t" data-title="PCL cropBox note" class="article-share-link">Share</a>
       
       
       
