@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>PCL cropBox note | gyc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="cropBox的使用CropBox 常用于点云立方体滤波">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PCL cropBox note">
+<meta property="og:url" content="http://example.com/2021/05/27/PCL-cropBox-note/index.html">
+<meta property="og:site_name" content="gyc">
+<meta property="og:description" content="cropBox的使用CropBox 常用于点云立方体滤波">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/05/27/PCL-cropBox-note/cropBox%E7%9A%84%E4%BD%BF%E7%94%A8.assets/image-20210308174026156.png">
+<meta property="og:image" content="http://example.com/2021/05/27/PCL-cropBox-note/cropBox的使用.assets/image-20210308174100329.png">
+<meta property="article:published_time" content="2021-05-27T15:01:40.000Z">
+<meta property="article:modified_time" content="2021-05-27T15:03:36.448Z">
+<meta property="article:author" content="cyg">
+<meta property="article:tag" content="PCL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/05/27/PCL-cropBox-note/cropBox%E7%9A%84%E4%BD%BF%E7%94%A8.assets/image-20210308174026156.png">
+  
+    <link rel="alternate" href="/atom.xml" title="gyc" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">gyc</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-PCL-cropBox-note" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/05/27/PCL-cropBox-note/" class="article-date">
+  <time class="dt-published" datetime="2021-05-27T15:01:40.000Z" itemprop="datePublished">2021-05-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      PCL cropBox note
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="cropBox的使用"><a href="#cropBox的使用" class="headerlink" title="cropBox的使用"></a>cropBox的使用</h1><p>CropBox 常用于点云立方体滤波</p>
+<span id="more"></span>
+
+<p>添加<code>#include &lt;pcl/filters/crop_box.h&gt;</code></p>
+<p>源码阅读</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CropBox</span> :</span> <span class="keyword">public</span> FilterIndices&lt;PointT&gt;</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">using</span> Filter&lt;PointT&gt;::getClassName;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">using</span> PointCloud = <span class="keyword">typename</span> Filter&lt;PointT&gt;::PointCloud;</span><br><span class="line">    <span class="keyword">using</span> PointCloudPtr = <span class="keyword">typename</span> PointCloud::Ptr;</span><br><span class="line">    <span class="keyword">using</span> PointCloudConstPtr = <span class="keyword">typename</span> PointCloud::ConstPtr;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">      <span class="keyword">using</span> Ptr = shared_ptr&lt;CropBox&lt;PointT&gt; &gt;;</span><br><span class="line">      <span class="keyword">using</span> ConstPtr = shared_ptr&lt;<span class="keyword">const</span> CropBox&lt;PointT&gt; &gt;;</span><br><span class="line"></span><br><span class="line">      <span class="comment">/** \brief Constructor.</span></span><br><span class="line"><span class="comment">        * \param[in] extract_removed_indices Set to true if you want to be able to extract the indices of points being removed (default = false).</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">      <span class="built_in">CropBox</span> (<span class="keyword">bool</span> extract_removed_indices = <span class="literal">false</span>) :</span><br><span class="line">        FilterIndices&lt;PointT&gt; (extract_removed_indices),</span><br><span class="line">        <span class="built_in">min_pt_</span> (Eigen::<span class="built_in">Vector4f</span> (<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">1</span>)),</span><br><span class="line">        <span class="built_in">max_pt_</span> (Eigen::<span class="built_in">Vector4f</span> (<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">        <span class="built_in">rotation_</span> (Eigen::Vector3f::<span class="built_in">Zero</span> ()),</span><br><span class="line">        <span class="built_in">translation_</span> (Eigen::Vector3f::<span class="built_in">Zero</span> ()),</span><br><span class="line">        <span class="built_in">transform_</span> (Eigen::Affine3f::<span class="built_in">Identity</span> ())</span><br><span class="line">      &#123;</span><br><span class="line">        filter_name_ = <span class="string">&quot;CropBox&quot;</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    <span class="comment">//设置box中最小的点</span></span><br><span class="line">     <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span></span></span><br><span class="line"><span class="function">      <span class="title">setMin</span> <span class="params">(<span class="keyword">const</span> Eigen::Vector4f &amp;min_pt)</span></span></span><br><span class="line"><span class="function">      </span>&#123;</span><br><span class="line">        min_pt_ = min_pt;</span><br><span class="line">      &#125;</span><br><span class="line">    <span class="comment">//返回box中的最小点</span></span><br><span class="line">     <span class="function"><span class="keyword">inline</span> Eigen::Vector4f</span></span><br><span class="line"><span class="function">      <span class="title">getMin</span> <span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">      </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (min_pt_);</span><br><span class="line">      &#125;</span><br><span class="line">    <span class="comment">//与box中最大点有关</span></span><br><span class="line">     <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span></span></span><br><span class="line"><span class="function">      <span class="title">setMax</span> <span class="params">(<span class="keyword">const</span> Eigen::Vector4f &amp;max_pt)</span></span></span><br><span class="line"><span class="function">      </span>&#123;</span><br><span class="line">        max_pt_ = max_pt;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">/** \brief Get the value of the maximum point of the box, as set by the user</span></span><br><span class="line"><span class="comment">        * \return the value of the internal \a max_pt parameter.</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">      <span class="function"><span class="keyword">inline</span> Eigen::Vector4f</span></span><br><span class="line"><span class="function">      <span class="title">getMax</span> <span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">      </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (max_pt_);</span><br><span class="line">      &#125;</span><br><span class="line">    <span class="comment">//设置位移分量 (tx,ty,tz)</span></span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span></span></span><br><span class="line"><span class="function">      <span class="title">setTranslation</span> <span class="params">(<span class="keyword">const</span> Eigen::Vector3f &amp;translation)</span></span></span><br><span class="line"><span class="function">      </span>&#123;</span><br><span class="line">        translation_ = translation;</span><br><span class="line">      &#125;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span></span></span><br><span class="line"><span class="function">      <span class="title">setRotation</span> <span class="params">(<span class="keyword">const</span> Eigen::Vector3f &amp;rotation)</span></span></span><br><span class="line"><span class="function">      </span>&#123;</span><br><span class="line">        rotation_ = rotation;</span><br><span class="line">      &#125;</span><br><span class="line">    </span><br><span class="line">     <span class="comment">//设置旋转向量(rx,ry,rz) </span></span><br><span class="line">      <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span></span></span><br><span class="line"><span class="function">      <span class="title">setRotation</span> <span class="params">(<span class="keyword">const</span> Eigen::Vector3f &amp;rotation)</span></span></span><br><span class="line"><span class="function">      </span>&#123;</span><br><span class="line">        rotation_ = rotation;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">/** \brief Get the value of the box rotatation parameter, as set by the user. */</span></span><br><span class="line">      <span class="function"><span class="keyword">inline</span> Eigen::Vector3f</span></span><br><span class="line"><span class="function">      <span class="title">getRotation</span> <span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">      </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (rotation_);</span><br><span class="line">      &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//通过提供变换矩阵</span></span><br><span class="line">      <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span></span></span><br><span class="line"><span class="function">      <span class="title">setTransform</span> <span class="params">(<span class="keyword">const</span> Eigen::Affine3f &amp;transform)</span></span></span><br><span class="line"><span class="function">      </span>&#123;</span><br><span class="line">        transform_ = transform;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">/** \brief Get the value of the transformation parameter, as set by the user. */</span></span><br><span class="line">      <span class="function"><span class="keyword">inline</span> Eigen::Affine3f</span></span><br><span class="line"><span class="function">      <span class="title">getTransform</span> <span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">      </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (transform_);</span><br><span class="line">      &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">protected</span>:</span><br><span class="line">      <span class="keyword">using</span> PCLBase&lt;PointT&gt;::input_;</span><br><span class="line">      <span class="keyword">using</span> PCLBase&lt;PointT&gt;::indices_;</span><br><span class="line">      <span class="keyword">using</span> Filter&lt;PointT&gt;::filter_name_;</span><br><span class="line">      <span class="keyword">using</span> FilterIndices&lt;PointT&gt;::negative_;</span><br><span class="line">      <span class="keyword">using</span> FilterIndices&lt;PointT&gt;::keep_organized_;</span><br><span class="line">      <span class="keyword">using</span> FilterIndices&lt;PointT&gt;::user_filter_value_;</span><br><span class="line">      <span class="keyword">using</span> FilterIndices&lt;PointT&gt;::extract_removed_indices_;</span><br><span class="line">      <span class="keyword">using</span> FilterIndices&lt;PointT&gt;::removed_indices_;</span><br><span class="line"></span><br><span class="line">      <span class="comment">/** \brief Sample of point indices</span></span><br><span class="line"><span class="comment">        * \param[out] indices the resultant point cloud indices</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">      <span class="function"><span class="keyword">void</span></span></span><br><span class="line"><span class="function">      <span class="title">applyFilter</span> <span class="params">(std::vector&lt;<span class="keyword">int</span>&gt; &amp;indices)</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">      <span class="comment">/** \brief The minimum point of the box. */</span></span><br><span class="line">      Eigen::Vector4f min_pt_;</span><br><span class="line">      <span class="comment">/** \brief The maximum point of the box. */</span></span><br><span class="line">      Eigen::Vector4f max_pt_;</span><br><span class="line">      <span class="comment">/** \brief The 3D rotation for the box. */</span></span><br><span class="line">      Eigen::Vector3f rotation_;</span><br><span class="line">      <span class="comment">/** \brief The 3D translation for the box. */</span></span><br><span class="line">      Eigen::Vector3f translation_;</span><br><span class="line">      <span class="comment">/** \brief The affine transform applied to the cloud. */</span></span><br><span class="line">      Eigen::Affine3f transform_;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> PointT&gt; <span class="keyword">void</span></span><br><span class="line">pcl::CropBox&lt;PointT&gt;::<span class="built_in">applyFilter</span> (std::vector&lt;<span class="keyword">int</span>&gt; &amp;indices)</span><br><span class="line">&#123;</span><br><span class="line">  indices.<span class="built_in">resize</span> (input_-&gt;<span class="built_in">size</span> ());<span class="comment">//输入点云</span></span><br><span class="line">  removed_indices_-&gt;<span class="built_in">resize</span> (input_-&gt;<span class="built_in">size</span> ());<span class="comment">//要删除的点云</span></span><br><span class="line">  <span class="keyword">int</span> indices_count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">int</span> removed_indices_count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  Eigen::Affine3f transform = Eigen::Affine3f::<span class="built_in">Identity</span> ();<span class="comment">//RT变换矩阵</span></span><br><span class="line">  Eigen::Affine3f inverse_transform = Eigen::Affine3f::<span class="built_in">Identity</span> ();<span class="comment">//RT变换矩阵的逆</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//rotation_中是欧拉角 rx ry rz 将其变换成4*4 RT矩阵，位移部分为0，0，0</span></span><br><span class="line">  <span class="keyword">if</span> (rotation_ != Eigen::Vector3f::<span class="built_in">Zero</span> ())</span><br><span class="line">  &#123;</span><br><span class="line">    pcl::<span class="built_in">getTransformation</span> (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>,</span><br><span class="line">                            <span class="built_in">rotation_</span> (<span class="number">0</span>), <span class="built_in">rotation_</span> (<span class="number">1</span>), <span class="built_in">rotation_</span> (<span class="number">2</span>),</span><br><span class="line">                            transform);</span><br><span class="line">    inverse_transform = transform.<span class="built_in">inverse</span> ();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//RT矩阵是否是单位阵</span></span><br><span class="line">  <span class="keyword">bool</span> transform_matrix_is_identity = transform_.<span class="built_in">matrix</span> ().<span class="built_in">isIdentity</span> ();</span><br><span class="line">  <span class="comment">//位移分量是否全为0</span></span><br><span class="line">  <span class="keyword">bool</span> translation_is_zero = (translation_ == Eigen::Vector3f::<span class="built_in">Zero</span> ());</span><br><span class="line">  <span class="comment">//RT矩阵的逆是不是单位阵</span></span><br><span class="line">  <span class="keyword">bool</span> inverse_transform_matrix_is_identity = inverse_transform.<span class="built_in">matrix</span> ().<span class="built_in">isIdentity</span> ();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> index : *indices_)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> (!input_-&gt;is_dense)<span class="comment">//检查该点的有效性</span></span><br><span class="line">      <span class="comment">// Check if the point is invalid</span></span><br><span class="line">      <span class="keyword">if</span> (!<span class="built_in">isFinite</span> ((*input_)[index]))<span class="comment">//检测点云的数据中是否包含NaN</span></span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get local point</span></span><br><span class="line">    PointT local_pt = (*input_)[index];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//对local_pt左乘transform_ RT矩阵 进行旋转</span></span><br><span class="line">    <span class="comment">// Transform point to world space 将点云转换到世界空间</span></span><br><span class="line">    <span class="keyword">if</span> (!transform_matrix_is_identity)</span><br><span class="line">      local_pt = pcl::transformPoint&lt;PointT&gt; (local_pt, transform_);</span><br><span class="line">    <span class="comment">//对local_pt的X Y Z进行调整</span></span><br><span class="line">    <span class="keyword">if</span> (!translation_is_zero)</span><br><span class="line">    &#123;</span><br><span class="line">      local_pt.x -= <span class="built_in">translation_</span> (<span class="number">0</span>);</span><br><span class="line">      local_pt.y -= <span class="built_in">translation_</span> (<span class="number">1</span>);</span><br><span class="line">      local_pt.z -= <span class="built_in">translation_</span> (<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//将点云变换到裁剪框的局部空间</span></span><br><span class="line">    <span class="comment">// Transform point to local space of crop box</span></span><br><span class="line">    <span class="keyword">if</span> (!inverse_transform_matrix_is_identity)</span><br><span class="line">      local_pt = pcl::transformPoint&lt;PointT&gt; (local_pt, inverse_transform);</span><br><span class="line">     <span class="comment">//点是否在裁剪框外部</span></span><br><span class="line">    <span class="comment">// If outside the cropbox</span></span><br><span class="line">    <span class="keyword">if</span> ( (local_pt.x &lt; min_pt_[<span class="number">0</span>] || local_pt.y &lt; min_pt_[<span class="number">1</span>] || local_pt.z &lt; min_pt_[<span class="number">2</span>]) ||</span><br><span class="line">         (local_pt.x &gt; max_pt_[<span class="number">0</span>] || local_pt.y &gt; max_pt_[<span class="number">1</span>] || local_pt.z &gt; max_pt_[<span class="number">2</span>]))</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> (negative_)</span><br><span class="line">        indices[indices_count++] = index;</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (extract_removed_indices_)</span><br><span class="line">        (*removed_indices_)[removed_indices_count++] = <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt; (index);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// If inside the cropbox</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> (negative_ &amp;&amp; extract_removed_indices_)</span><br><span class="line">        (*removed_indices_)[removed_indices_count++] = <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt; (index);</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (!negative_) </span><br><span class="line">        indices[indices_count++] = index;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  indices.<span class="built_in">resize</span> (indices_count);</span><br><span class="line">  removed_indices_-&gt;<span class="built_in">resize</span> (removed_indices_count);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>算子作用说明</p>
+<p>1、初始化cropBox时，默认中心在原点处，生成一个，边长为2的正方体</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">CropBox</span> (<span class="keyword">bool</span> extract_removed_indices = <span class="literal">false</span>) :</span><br><span class="line">        FilterIndices&lt;PointT&gt; (extract_removed_indices),</span><br><span class="line">        <span class="built_in">min_pt_</span> (Eigen::<span class="built_in">Vector4f</span> (<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">1</span>)),</span><br><span class="line">        <span class="built_in">max_pt_</span> (Eigen::<span class="built_in">Vector4f</span> (<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">        <span class="built_in">rotation_</span> (Eigen::Vector3f::<span class="built_in">Zero</span> ()),</span><br><span class="line">        <span class="built_in">translation_</span> (Eigen::Vector3f::<span class="built_in">Zero</span> ()),</span><br><span class="line">        <span class="built_in">transform_</span> (Eigen::Affine3f::<span class="built_in">Identity</span> ())</span><br><span class="line">      &#123;</span><br><span class="line">        filter_name_ = <span class="string">&quot;CropBox&quot;</span>;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pcl::CropBox&lt;pcl::PointXYZ&gt; box_filter2;<span class="comment">//滤波器对象</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">auto</span> rt= box_filter2.<span class="built_in">getTransform</span>();</span><br><span class="line">	<span class="keyword">auto</span> t = box_filter2.<span class="built_in">getTranslation</span>();</span><br><span class="line">	<span class="keyword">auto</span> r = box_filter2.<span class="built_in">getRotation</span>();</span><br><span class="line">	std::cout &lt;&lt; rt.<span class="built_in">matrix</span>() &lt;&lt; std::endl;<span class="comment">//4*4 单位阵</span></span><br><span class="line">	std::cout &lt;&lt; t.<span class="built_in">matrix</span>() &lt;&lt; std::endl;<span class="comment">//0 0 0</span></span><br><span class="line">	std::cout &lt;&lt; r.<span class="built_in">matrix</span>() &lt;&lt; std::endl;<span class="comment">//0 0 0</span></span><br></pre></td></tr></table></figure>
+
+<p>2、将OBB的结果用于cropBox前，需要知道OBB与原点之间的转换关系，即RT矩阵，指的是先进行旋转，再平移</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//绘制点云OBB</span></span><br><span class="line">	pcl::PointXYZ min_point_OBB;</span><br><span class="line">	pcl::PointXYZ max_point_OBB;</span><br><span class="line">	pcl::PointXYZ position_OBB;</span><br><span class="line">	Eigen::Matrix3f rotational_matrix_OBB;</span><br><span class="line">	pcl::MomentOfInertiaEstimation &lt;pcl::PointXYZ&gt; estimBox;</span><br><span class="line">	estimBox.<span class="built_in">setInputCloud</span>(cloud);</span><br><span class="line">	estimBox.<span class="built_in">compute</span>();</span><br><span class="line">	estimBox.<span class="built_in">getOBB</span>(min_point_OBB, max_point_OBB, position_OBB, rotational_matrix_OBB);</span><br><span class="line"></span><br><span class="line">Eigen::Vector4f minPoints, maxPoints;</span><br><span class="line">	Eigen::Vector3f translasion = Eigen::<span class="built_in">Vector3f</span>(position_OBB.x, position_OBB.y, position_OBB.z);<span class="comment">//得到位移分量</span></span><br><span class="line">	Eigen::Vector3f eulerAngle = rotational_matrix_OBB.<span class="built_in">eulerAngles</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>);<span class="comment">//将旋转矩阵转成欧拉角（Z-Y-X）z</span></span><br><span class="line"><span class="comment">//在cropBox使用的是（rx,ry,rz）而不是（rz,ry,rx）</span></span><br><span class="line">	Eigen::Vector3f eulerAngle2 = Eigen::<span class="built_in">Vector3f</span>(<span class="built_in">eulerAngle</span>(<span class="number">2</span>), <span class="built_in">eulerAngle</span>(<span class="number">1</span>), <span class="built_in">eulerAngle</span>(<span class="number">0</span>));</span><br></pre></td></tr></table></figure>
+
+<p>3、进行立方体滤波</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pcl::CropBox&lt;pcl::PointXYZ&gt; box_filter;<span class="comment">//滤波器对象</span></span><br><span class="line">	minPoints = Eigen::<span class="built_in">Vector4f</span>(min_point_OBB.x,min_point_OBB.y*<span class="number">0.5</span>,min_point_OBB.z,<span class="number">1.0f</span>);</span><br><span class="line">	maxPoints = Eigen::<span class="built_in">Vector4f</span>(max_point_OBB.x, max_point_OBB.y*<span class="number">0.5</span>, max_point_OBB.z, <span class="number">1.0f</span>);</span><br><span class="line">	box_filter.<span class="built_in">setInputCloud</span>(cloud);</span><br><span class="line">	box_filter.<span class="built_in">setMin</span>(minPoints);<span class="comment">//在y方向上收缩了一半</span></span><br><span class="line">	box_filter.<span class="built_in">setMax</span>(maxPoints);</span><br><span class="line">	box_filter.<span class="built_in">setTranslation</span>(translasion);<span class="comment">//点在原始坐标系下的坐标</span></span><br><span class="line">	box_filter.<span class="built_in">setRotation</span>(eulerAngle2);<span class="comment">//rx,ry,rz</span></span><br><span class="line">	box_filter.<span class="built_in">setNegative</span>(<span class="literal">false</span>);<span class="comment">//保留OBB框内的点</span></span><br><span class="line">	box_filter.<span class="built_in">filter</span>(*flit);</span><br></pre></td></tr></table></figure>
+
+<p>4、结果</p>
+<p><img src="cropBox%E7%9A%84%E4%BD%BF%E7%94%A8.assets/image-20210308174026156.png" alt="image-20210308174026156"><img src="cropBox的使用.assets/image-20210308174100329.png" alt="image-20210308174100329" style="zoom:80%;" /></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/05/27/PCL-cropBox-note/" data-id="ckp711a3j0000vwuhdjcz48b0" data-title="PCL cropBox note" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PCL/" rel="tag">PCL</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/05/27/pcl-study-note/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">pcl study note</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PCL/" rel="tag">PCL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2%E6%B5%8B%E8%AF%95/" rel="tag">博客测试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/PCL/" style="font-size: 20px;">PCL</a> <a href="/tags/%E5%8D%9A%E5%AE%A2%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">博客测试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/27/PCL-cropBox-note/">PCL cropBox note</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/27/pcl-study-note/">pcl study note</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/27/test/">test</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/27/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 cyg<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
