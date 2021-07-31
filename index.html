@@ -133,12 +133,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -172,6 +172,103 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/31/%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favorite.jpg">
+      <meta itemprop="name" content="cyg">
+      <meta itemprop="description" content="超越顶级明镜止水之心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="摸鱼且很菜blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/07/31/%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">旋转矩阵学习</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-07-31 21:53:04 / 修改时间：22:02:46" itemprop="dateCreated datePublished" datetime="2021-07-31T21:53:04+08:00">2021-07-31</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="旋转矩阵-Rotation-Matrix"><a href="#旋转矩阵-Rotation-Matrix" class="headerlink" title="旋转矩阵 Rotation Matrix"></a>旋转矩阵 Rotation Matrix</h1><h2 id="关于Rotation-Matrix"><a href="#关于Rotation-Matrix" class="headerlink" title="关于Rotation Matrix"></a>关于Rotation Matrix</h2><ul>
+<li><strong>三个用法：</strong></li>
+</ul>
+<ol>
+<li>描述一个frame相对于另一个frame的姿态</li>
+<li>将point由某一个frame的表达转换到另一个frame（仅有相对转动变化）来表达</li>
+<li>将point(vector)在同一个frame中进行转动</li>
+</ol>
+<ul>
+<li><p><strong>思考</strong>——空间中的Rotation是3DOFs，那要如何把一般rotation matrix所表达的姿态，<strong>拆解成3次旋转角度</strong>，以应对到3个DOFs？</p>
+</li>
+<li><p>注意事项：</p>
+</li>
+<li><ul>
+<li>Rotation<strong>前后顺序</strong>需要明确定义（与移动不同，先向X移动后向Y移动与先向Y移动后向X移动可以互换顺序，而旋转不可以）</li>
+<li><strong>旋转转轴</strong>也需要明确定义。一般有两种：【固定不动】旋转轴和【Body frame(随动)】转轴。</li>
+</ul>
+</li>
+<li><p>两个拆解方式：</p>
+</li>
+<li><ul>
+<li>对方向<strong>【固定不动】</strong>的旋转轴旋转：<strong>Fixed angles</strong>…</li>
+<li>对<strong>【转动的frame当下所在】</strong>的旋转方向旋转：<strong>Euler angles</strong> …</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/07/31/%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5%E5%AD%A6%E4%B9%A0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
