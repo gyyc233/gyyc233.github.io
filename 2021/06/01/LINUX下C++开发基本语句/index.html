@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="LINUX下C++开发基本语句使用环境为ubantu 20.04">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LINUX下C++开发基本语句">
+<meta property="og:url" content="http://example.com/2021/06/01/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91%E5%9F%BA%E6%9C%AC%E8%AF%AD%E5%8F%A5/index.html">
+<meta property="og:site_name" content="摸鱼且很菜blog">
+<meta property="og:description" content="LINUX下C++开发基本语句使用环境为ubantu 20.04">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D.png">
+<meta property="og:image" content="http://example.com/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210525082758574.png">
+<meta property="og:image" content="http://example.com/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210525082844765.png">
+<meta property="og:image" content="http://example.com/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210527075823571.png">
+<meta property="og:image" content="http://example.com/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210527080026576.png">
+<meta property="og:image" content="http://example.com/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210527080329621.png">
+<meta property="og:image" content="http://example.com/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210527080612510.png">
+<meta property="og:image" content="http://example.com/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210529120835370.png">
+<meta property="article:published_time" content="2021-06-01T15:18:42.000Z">
+<meta property="article:modified_time" content="2021-08-29T04:06:04.832Z">
+<meta property="article:author" content="cyg">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D.png">
+
+
+<link rel="canonical" href="http://example.com/2021/06/01/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91%E5%9F%BA%E6%9C%AC%E8%AF%AD%E5%8F%A5/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2021&#x2F;06&#x2F;01&#x2F;LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91%E5%9F%BA%E6%9C%AC%E8%AF%AD%E5%8F%A5&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;06&#x2F;01&#x2F;LINUX下C++开发基本语句&#x2F;&quot;,&quot;title&quot;:&quot;LINUX下C++开发基本语句&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>LINUX下C++开发基本语句 | 摸鱼且很菜blog</title><script src="/js/config.js"></script>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?<55216f0c2c8931a0d636f20bd9836bd4>"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">摸鱼且很菜blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LINUX%E4%B8%8BC-%E5%BC%80%E5%8F%91%E5%9F%BA%E6%9C%AC%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.</span> <span class="nav-text">LINUX下C++开发基本语句</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#linux%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">linux系统介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E5%92%8C%E9%80%89%E9%A1%B9"><span class="nav-number">1.1.1.</span> <span class="nav-text">指令和选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E6%8C%87%E4%BB%A4%E8%AE%B2%E8%A7%A3"><span class="nav-number">1.1.2.</span> <span class="nav-text">重要指令讲解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwd-print-current-workingdirectory"><span class="nav-number">1.1.3.</span> <span class="nav-text">pwd -print current workingdirectory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ls-list-directory-contents"><span class="nav-number">1.1.4.</span> <span class="nav-text">ls - list  directory contents</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cd-change-directory"><span class="nav-number">1.1.5.</span> <span class="nav-text">cd -change directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mkdir-make-direcories"><span class="nav-number">1.1.6.</span> <span class="nav-text">mkdir -make direcories</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tree%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.7.</span> <span class="nav-text">tree的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#touch-change-file-timestamps"><span class="nav-number">1.1.8.</span> <span class="nav-text">touch -change file timestamps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rm-remove-files-or-directories"><span class="nav-number">1.1.9.</span> <span class="nav-text">rm -remove files or directories</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="cyg"
+      src="/images/favorite.jpg">
+  <p class="site-author-name" itemprop="name">cyg</p>
+  <div class="site-description" itemprop="description">超越顶级明镜止水之心</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gyyc233" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gyyc233" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/01/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91%E5%9F%BA%E6%9C%AC%E8%AF%AD%E5%8F%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favorite.jpg">
+      <meta itemprop="name" content="cyg">
+      <meta itemprop="description" content="超越顶级明镜止水之心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="摸鱼且很菜blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LINUX下C++开发基本语句
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-06-01 23:18:42" itemprop="dateCreated datePublished" datetime="2021-06-01T23:18:42+08:00">2021-06-01</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-08-29 12:06:04" itemprop="dateModified" datetime="2021-08-29T12:06:04+08:00">2021-08-29</time>
+      </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="LINUX下C-开发基本语句"><a href="#LINUX下C-开发基本语句" class="headerlink" title="LINUX下C++开发基本语句"></a>LINUX下C++开发基本语句</h1><p>使用环境为ubantu 20.04</p>
+<span id="more"></span>
+
+<h2 id="linux系统介绍"><a href="#linux系统介绍" class="headerlink" title="linux系统介绍"></a>linux系统介绍</h2><p><img src="/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D.png"></p>
+<p><img src="/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210525082758574.png"></p>
+<p><img src="/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210525082844765.png"></p>
+<p>重点关注</p>
+<p><img src="/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210527075823571.png"></p>
+<h3 id="指令和选项"><a href="#指令和选项" class="headerlink" title="指令和选项"></a>指令和选项</h3><p><img src="/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210527080026576.png"></p>
+<p><img src="/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210527080329621.png"></p>
+<h3 id="重要指令讲解"><a href="#重要指令讲解" class="headerlink" title="重要指令讲解"></a>重要指令讲解</h3><h3 id="pwd-print-current-workingdirectory"><a href="#pwd-print-current-workingdirectory" class="headerlink" title="pwd -print current workingdirectory"></a><strong>pwd</strong> -print current workingdirectory</h3><h3 id="ls-list-directory-contents"><a href="#ls-list-directory-contents" class="headerlink" title="ls - list  directory contents"></a><strong>ls</strong> - list  directory contents</h3><p><img src="/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210527080612510.png"></p>
+<ul>
+<li>用法2： <strong>ls [路径]</strong></li>
+</ul>
+<p>含义：列出指定路径下的所有文件/文件夹的名称</p>
+<ol>
+<li>绝对路径：相对于root目录的路径</li>
+<li>相对路径：相对与当前目录的路径</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ls 相对路径</span></span><br><span class="line">ls ./ <span class="comment">#表示 当前路径下</span></span><br><span class="line">ls ../ <span class="comment">#表示 上一级目录下</span></span><br><span class="line"><span class="comment">#绝对路径</span></span><br><span class="line">ls /home <span class="comment">#注意保留空格</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>用法3： ls 选项</p>
+<p>含义：列出指定路径下的文件/文件夹的名称，并以指定格式进行显示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># ls 选项 路径</span><br><span class="line">ls -ash /home #-ash后面注意添加空格</span><br><span class="line"># 选项解释</span><br><span class="line">-l:表示list，表示以详细列表的形式进行展示</span><br><span class="line">-a:表示显示所有的文件/文件夹（包含了隐藏文件/文件夹）</span><br><span class="line">-h:表示以可读性高的形式进行显示</span><br><span class="line"># ls -l 中 “-”表示该行对应的文档类型为文件，“d”表示文档类型为文件夹</span><br><span class="line"># 在linux中隐藏文档一般以“.”开头</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>在输入 ls -a前后，发现多了一些.开头的文件。</p>
+<ul>
+<li>ctrl+l : 在终端输入快捷键 ctrl+l 使终端清屏。</li>
+</ul>
+<h3 id="cd-change-directory"><a href="#cd-change-directory" class="headerlink" title="cd -change directory"></a><strong>cd -change directory</strong></h3><ul>
+<li>作用：切换当前工作目录</li>
+<li>用法1：cd;cd ~</li>
+</ul>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以下两条命令等价。表示直接进入当前用户的home目录下</span></span><br><span class="line"><span class="built_in">cd</span></span><br><span class="line"><span class="built_in">cd</span> ~ <span class="comment"># ~ 波浪线 就代表home目录</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用法2： cd [相对路径] </li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入上级目录下</span></span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line"><span class="comment"># 进入到上级目录中的local目录下</span></span><br><span class="line"><span class="built_in">cd</span> ../<span class="built_in">local</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>用法3：cd [绝对路径] <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入到usr/local目录下</span></span><br><span class="line"><span class="built_in">cd</span> /usr/loacl</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="mkdir-make-direcories"><a href="#mkdir-make-direcories" class="headerlink" title="mkdir -make direcories"></a>mkdir -make direcories</h3><ul>
+<li>作用：创建目录</li>
+<li>用法1：mkdir 路径</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在当前路径下创建目录“myfolder”</span></span><br><span class="line">mkdir myfolder</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用法2：mkdir  -p 路径</li>
+<li>含义：一次性创建多层不存在的目录</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建 -/a/b/c 目录</span></span><br><span class="line">mkdir -p a/b/c</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用法3：mkdir 路径1 路径2</li>
+<li>含义：一次创建多个目录</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在当前目录分别创建a,b,c三个文件夹</span></span><br><span class="line">mkdir a b c</span><br></pre></td></tr></table></figure>
+
+<h3 id="tree的使用"><a href="#tree的使用" class="headerlink" title="tree的使用"></a>tree的使用</h3><p>ubantu 默认是没有tree指令来显示文件树的，需要安装</p>
+<p>终端输入 sudo apt-get install tree 进行安装</p>
+<p>常用语句：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tree -d</span><br><span class="line">tree -x</span><br></pre></td></tr></table></figure>
+
+<h3 id="touch-change-file-timestamps"><a href="#touch-change-file-timestamps" class="headerlink" title="touch -change file timestamps"></a>touch -change file timestamps</h3><p>作用：创建新文件</p>
+<p><img src="/LINUX%E4%B8%8BC++%E5%BC%80%E5%8F%91/image-20210529120835370.png"></p>
+<ul>
+<li>用法1：touch 路径</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在当前目录下创建linux.txt</span></span><br><span class="line">touch linux.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">#在上级目录下创建linux文件</span></span><br><span class="line">touch ../linux</span><br><span class="line"></span><br><span class="line"><span class="comment">#在/home/gyc/目录下创建myfile文件</span></span><br><span class="line">touch /home/gyc/myfile</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用法2：touch 文件1 文件2</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在当前目录下创建 file file.txt 两个文件</span></span><br><span class="line">touch file file.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="rm-remove-files-or-directories"><a href="#rm-remove-files-or-directories" class="headerlink" title="rm -remove files or directories"></a>rm -remove files or directories</h3><p>作用：删除文件/目录</p>
+<ul>
+<li>用法1：rm [选项]</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/27/PCL-cropBox-note/" rel="prev" title="PCL cropBox note">
+                  <i class="fa fa-chevron-left"></i> PCL cropBox note
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/06/01/C-%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/" rel="next" title="C++中的函数指针">
+                  C++中的函数指针 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">cyg</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{&quot;enable&quot;:true,&quot;github_id&quot;:&quot;gyyc233&quot;,&quot;repo&quot;:&quot;gyyc233.github.io&quot;,&quot;client_id&quot;:&quot;0c04f54434c3a39e65b6&quot;,&quot;client_secret&quot;:&quot;796c7805b9ca6b81ac0a0b134a0f31cc0de73139&quot;,&quot;admin_user&quot;:&quot;gyyc233&quot;,&quot;distraction_free_mode&quot;:true,&quot;proxy&quot;:&quot;https:&#x2F;&#x2F;cors-anywhere.azm.workers.dev&#x2F;https:&#x2F;&#x2F;github.com&#x2F;login&#x2F;oauth&#x2F;access_token&quot;,&quot;language&quot;:null,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;gitalk@1.7.2&#x2F;dist&#x2F;gitalk.min.js&quot;,&quot;integrity&quot;:&quot;sha256-Pmj85ojLaPOWwRtlMJwmezB&#x2F;Qg8BzvJp5eTzvXaYAfA&#x3D;&quot;},&quot;path_md5&quot;:&quot;f1bd6cd4ac7b25b1d1f1cee2ca08a6d1&quot;}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"kesyoban"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":false},"rect":"opacity:0.7","log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
