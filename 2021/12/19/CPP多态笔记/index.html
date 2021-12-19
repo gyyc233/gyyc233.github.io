@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="多态是C++ 面向对象设计的特征之一。包括运行时多态和编译时多态，在实际工程开发中低耦合，插件化经常涉及。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CPP多态笔记">
+<meta property="og:url" content="http://example.com/2021/12/19/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="摸鱼且很菜blog">
+<meta property="og:description" content="多态是C++ 面向对象设计的特征之一。包括运行时多态和编译时多态，在实际工程开发中低耦合，插件化经常涉及。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%A4%9A%E6%80%811.png">
+<meta property="og:image" content="http://example.com/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/%E7%B1%BBA%E7%9A%84%E8%99%9A%E8%A1%A81.png">
+<meta property="og:image" content="http://example.com/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%99%9A%E8%A1%A81.png">
+<meta property="og:image" content="http://example.com/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A1.png">
+<meta property="article:published_time" content="2021-12-19T06:33:03.000Z">
+<meta property="article:modified_time" content="2021-12-19T06:49:54.571Z">
+<meta property="article:author" content="cyg">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%A4%9A%E6%80%811.png">
+
+
+<link rel="canonical" href="http://example.com/2021/12/19/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2021&#x2F;12&#x2F;19&#x2F;CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;12&#x2F;19&#x2F;CPP多态笔记&#x2F;&quot;,&quot;title&quot;:&quot;CPP多态笔记&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>CPP多态笔记 | 摸鱼且很菜blog</title><script src="/js/config.js"></script>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?<55216f0c2c8931a0d636f20bd9836bd4>"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">摸鱼且很菜blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%87%8D%E8%BD%BD%E4%B8%8E%E9%87%8D%E5%86%99"><span class="nav-number">1.</span> <span class="nav-text">重载与重写</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E6%80%81"><span class="nav-number">2.</span> <span class="nav-text">多态</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E5%A4%9A%E6%80%81"><span class="nav-number">2.1.</span> <span class="nav-text">运行时多态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B4%E6%98%8E"><span class="nav-number">2.1.1.</span> <span class="nav-text">说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%97%B6%E5%A4%9A%E6%80%81"><span class="nav-number">2.2.</span> <span class="nav-text">编译时多态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B4%E6%98%8E-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">2.3.</span> <span class="nav-text">分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%9C%9F%E5%A4%9A%E6%80%81%E4%BC%98%E7%82%B9"><span class="nav-number">2.3.1.</span> <span class="nav-text">运行期多态优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%9C%9F%E5%A4%9A%E6%80%81%E7%BC%BA%E7%82%B9"><span class="nav-number">2.3.2.</span> <span class="nav-text">运行期多态缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%9C%9F%E5%A4%9A%E6%80%81%E4%BC%98%E7%82%B9"><span class="nav-number">2.3.3.</span> <span class="nav-text">编译期多态优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%9C%9F%E5%A4%9A%E6%80%81%E7%BC%BA%E7%82%B9"><span class="nav-number">2.3.4.</span> <span class="nav-text">编译期多态缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E6%8E%A5%E5%8F%A3%E4%B8%8E%E9%9A%90%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.4.</span> <span class="nav-text">显式接口与隐式接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E8%A1%A8"><span class="nav-number">2.5.</span> <span class="nav-text">虚函数表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E8%99%9A%E8%A1%A8"><span class="nav-number">2.5.1.</span> <span class="nav-text">类的虚表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E8%A1%A8%E6%8C%87%E9%92%88"><span class="nav-number">2.6.</span> <span class="nav-text">虚表指针</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A"><span class="nav-number">3.</span> <span class="nav-text">动态绑定</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="cyg"
+      src="/images/favorite.jpg">
+  <p class="site-author-name" itemprop="name">cyg</p>
+  <div class="site-description" itemprop="description">超越顶级明镜止水之心</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gyyc233" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gyyc233" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/19/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favorite.jpg">
+      <meta itemprop="name" content="cyg">
+      <meta itemprop="description" content="超越顶级明镜止水之心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="摸鱼且很菜blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CPP多态笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-12-19 14:33:03 / 修改时间：14:49:54" itemprop="dateCreated datePublished" datetime="2021-12-19T14:33:03+08:00">2021-12-19</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>多态是C++ 面向对象设计的特征之一。包括运行时多态和编译时多态，在实际工程开发中低耦合，插件化经常涉及。</p>
+<span id="more"></span>
+
+<h1 id="重载与重写"><a href="#重载与重写" class="headerlink" title="重载与重写"></a>重载与重写</h1><ol>
+<li><p><strong>重载overload</strong>：在同一个类中，函数名相同，参数列表不同，编译器会根据这些函数的不同参数列表，将同名的函数名称做修饰，从而生成一些不同名称的预处理函数，未体现多态。</p>
+</li>
+<li><p><strong>重写override</strong>：也叫覆盖，子类重新定义父类中有相同名称相同参数的虚函数，主要是在继承关系中出现的，被重写的函数必须是virtual的，重写函数的访问修饰符可以不同，尽管virtual是private的，子类中重写函数改为public,protected也可以，体现了多态。</p>
+</li>
+<li><p><strong>重定义redefining：</strong>也叫隐藏，子类重新定义父类中有相同名称的非虚函数，参数列表可以相同可以不同，会覆盖其父类的方法，未体现多态。</p>
+</li>
+</ol>
+<h1 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h1><p>“一个接口，多种方法”，程序在运行时才决定调用的函数，C++的多态性是通过虚函数来实现的。</p>
+<ol>
+<li>最常见的用法就是<strong>声明基类的指针，利用该指针指向任意一个子类对象，调用相应的虚函数</strong>，可以根据指向的子类的不同而实现不同的方法。</li>
+<li>如果没有使用虚函数，则<strong>利用基类指针调用相应的函数</strong>的时候，将总<strong>被限制在基类函数</strong>本身，而无法调用到子类中被重写过的函数。</li>
+</ol>
+<h2 id="运行时多态"><a href="#运行时多态" class="headerlink" title="运行时多态"></a>运行时多态</h2><p>通过虚函数实现。设计思想要归结到类继承体系的设计，对于有相关功能的对象集合，我们总希望能够抽象出它们共有的功能集合，在基类中将这些功能声明为虚接口（虚函数），然后由子类继承基类去重写这些虚接口，以实现子类特有的具体功能。</p>
+<p>EX：</p>
+<p><img src="/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/%E8%BF%90%E8%A1%8C%E6%97%B6%E5%A4%9A%E6%80%811.png" alt="运行时多态1"></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span> :</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">shout</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> :</span><span class="keyword">public</span> Animal</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">shout</span><span class="params">()</span></span>&#123; cout &lt;&lt; <span class="string">&quot;汪汪！&quot;</span>&lt;&lt;endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> :</span><span class="keyword">public</span> Animal</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">shout</span><span class="params">()</span></span>&#123; cout &lt;&lt; <span class="string">&quot;喵喵~&quot;</span>&lt;&lt;endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span> :</span> <span class="keyword">public</span> Animal</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">shout</span><span class="params">()</span></span>&#123; cout &lt;&lt; <span class="string">&quot;叽喳!&quot;</span>&lt;&lt;endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Animal * anim1 = <span class="keyword">new</span> Dog;</span><br><span class="line">    Animal * anim2 = <span class="keyword">new</span> Cat;</span><br><span class="line">    Animal * anim3 = <span class="keyword">new</span> Bird;</span><br><span class="line">     </span><br><span class="line">   <span class="comment">//藉由指针（或引用）调用的接口，在运行期确定指针（或引用）所指对象的真正类型，调用该类型对应的接口</span></span><br><span class="line">    anim1-&gt;<span class="built_in">shout</span>();</span><br><span class="line">    anim2-&gt;<span class="built_in">shout</span>();</span><br><span class="line">    anim3-&gt;<span class="built_in">shout</span>();</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//delete 对象</span></span><br><span class="line">    ...</span><br><span class="line">   <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>运行期多态的实现依赖于虚函数机制。当某个类声明了虚函数时，编译器将为该类对象安插一个虚函数表指针，并为该类设置一张唯一的虚函数表，虚函数表中存放的是该类虚函数地址。运行期间通过虚函数表指针与虚函数表去确定该类虚函数的真正实现。</p>
+<p><strong>运行期多态的优势还在于它使处理异质对象集合称为可能</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//我们有个动物园，里面有一堆动物</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vector&lt;Animal*&gt;anims;</span><br><span class="line"> </span><br><span class="line">    Animal * anim1 = <span class="keyword">new</span> Dog;</span><br><span class="line">    Animal * anim2 = <span class="keyword">new</span> Cat;</span><br><span class="line">    Animal * anim3 = <span class="keyword">new</span> Bird;</span><br><span class="line">    Animal * anim4 = <span class="keyword">new</span> Dog;</span><br><span class="line">    Animal * anim5 = <span class="keyword">new</span> Cat;</span><br><span class="line">    Animal * anim6 = <span class="keyword">new</span> Bird;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//处理异质类集合</span></span><br><span class="line">    anims.<span class="built_in">push_back</span>(anim1);</span><br><span class="line">    anims.<span class="built_in">push_back</span>(anim2);</span><br><span class="line">    anims.<span class="built_in">push_back</span>(anim3);</span><br><span class="line">    anims.<span class="built_in">push_back</span>(anim4);</span><br><span class="line">    anims.<span class="built_in">push_back</span>(anim5);</span><br><span class="line">    anims.<span class="built_in">push_back</span>(anim6);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> &amp; i : anims)</span><br><span class="line">    &#123;</span><br><span class="line">        i-&gt;<span class="built_in">shout</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//delete对象</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="编译时多态"><a href="#编译时多态" class="headerlink" title="编译时多态"></a>编译时多态</h2><p>对<strong>模板参数</strong>而言，多态是通过<strong>模板具现化和函数重载解析</strong>实现的。<strong>以不同的模板参数具现化导致调用不同的函数</strong>，这就是所谓的编译期多态。</p>
+<h3 id="说明-1"><a href="#说明-1" class="headerlink" title="说明"></a>说明</h3><p>相比较于运行期多态，实现编译期多态的类之间并不需要成为一个继承体系，它们之间可以没有什么关系，但<strong>约束是它们都有相同的隐式接口</strong>。我们将上面的例子改写为:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span> :</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">shout</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;发出动物的叫声&quot;</span> &lt;&lt; endl; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">     <span class="function"><span class="keyword">void</span> <span class="title">shout</span><span class="params">()</span></span>&#123; cout &lt;&lt; <span class="string">&quot;汪汪！&quot;</span>&lt;&lt;endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">     <span class="function"><span class="keyword">void</span> <span class="title">shout</span><span class="params">()</span></span>&#123; cout &lt;&lt; <span class="string">&quot;喵喵~&quot;</span>&lt;&lt;endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">     <span class="function"><span class="keyword">void</span> <span class="title">shout</span><span class="params">()</span></span>&#123; cout &lt;&lt; <span class="string">&quot;叽喳!&quot;</span>&lt;&lt;endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span>  <span class="title">animalShout</span><span class="params">(T &amp; t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    t.<span class="built_in">shout</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Animal anim;</span><br><span class="line">    Dog dog;</span><br><span class="line">    Cat cat;</span><br><span class="line">    Bird bird;</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">animalShout</span>(anim);</span><br><span class="line">    <span class="built_in">animalShout</span>(dog);</span><br><span class="line">    <span class="built_in">animalShout</span>(cat);</span><br><span class="line">    <span class="built_in">animalShout</span>(bird);</span><br><span class="line"> </span><br><span class="line">    <span class="built_in">getchar</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在编译之前，函数模板中t.shout()调用的是哪个接口并不确定。在<strong>编译期间，编译器推断出模板参数，因此确定调用的shout是哪个具体类型的接口</strong>。<strong>不同的推断结果调用不同的函数</strong>，这就是编译器多态。这类似于重载函数在编译器进行推导，以确定哪一个函数被调用。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><h3 id="运行期多态优点"><a href="#运行期多态优点" class="headerlink" title="运行期多态优点"></a>运行期多态优点</h3><ol>
+<li>OO(Object Oriented)设计中重要的特性，对客观世界直觉认识。</li>
+<li>能够处理同一个继承体系下的异质类集合。</li>
+</ol>
+<h3 id="运行期多态缺点"><a href="#运行期多态缺点" class="headerlink" title="运行期多态缺点"></a>运行期多态缺点</h3><ol>
+<li>运行期间进行虚函数绑定，提高了程序运行开销。</li>
+<li>庞大的类继承层次，对接口的修改易影响类继承层次。</li>
+<li>由于<strong>虚函数在运行期在确定，所以编译器无法对虚函数进行优化</strong>。</li>
+<li>虚表指针增大了对象体积，类也多了一张虚函数表，当然，这是理所应当值得付出的资源消耗，列为缺点有点勉强。</li>
+</ol>
+<h3 id="编译期多态优点"><a href="#编译期多态优点" class="headerlink" title="编译期多态优点"></a>编译期多态优点</h3><ol>
+<li>它带来了泛型编程的概念，使得C++拥有泛型编程与STL这样的强大武器。</li>
+<li>在编译器完成多态，提高运行期效率。</li>
+<li>具有很强的<strong>适配性与松耦合性</strong>，对于特殊类型可由模板偏特化、全特化来处理。</li>
+</ol>
+<h3 id="编译期多态缺点"><a href="#编译期多态缺点" class="headerlink" title="编译期多态缺点"></a>编译期多态缺点</h3><ol>
+<li>程序可读性降低，代码调试带来困难。</li>
+<li>无法实现模板的分离编译，当工程很大时，编译时间不可小觑。</li>
+<li>无法处理异质对象集合。</li>
+</ol>
+<h2 id="显式接口与隐式接口"><a href="#显式接口与隐式接口" class="headerlink" title="显式接口与隐式接口"></a>显式接口与隐式接口</h2><p>所谓的显式接口是指类继承层次中定义的接口或是某个具体类提供的接口，总而言之，我们能够在源代码中找到这个接口.显式接口以函数签名为中心，例如</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">AnimalShot</span><span class="params">(Animal &amp; anim)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    anim.<span class="built_in">shout</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们称shout为一个显式接口。在运行期多态中的接口皆为显式接口。</p>
+<p>而对模板参数而言，接口是隐式的，奠基于有效表达式。例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">AnimalShot</span><span class="params">(T &amp; anim)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    anim.<span class="built_in">shout</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于anim来说，必须支持哪一种接口，要由模板参数执行于anim身上的操作来决定</p>
+<h2 id="虚函数表"><a href="#虚函数表" class="headerlink" title="虚函数表"></a>虚函数表</h2><p>为了实现C++的多态，C++使用了一种动态绑定的技术。这个技术的核心是虚函数表（下文简称虚表）</p>
+<h3 id="类的虚表"><a href="#类的虚表" class="headerlink" title="类的虚表"></a>类的虚表</h3><p>每个包含了虚函数的类都包含一个虚表。</p>
+<p>我们知道，当一个类（A）继承另一个类（B）时，类A会继承类B的函数的调用权。所以如果一个基类包含了虚函数，那么其继承类也可调用这些虚函数，换句话说，一个类继承了包含虚函数的基类，那么这个类也拥有自己的虚表。</p>
+<p>我们来看以下的代码。类A包含虚函数vfunc1，vfunc2，由于类A包含虚函数，故类A拥有一个虚表。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">vfunc1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">vfunc2</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> m_data1, m_data2;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>类A的虚表</p>
+<p><img src="/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/%E7%B1%BBA%E7%9A%84%E8%99%9A%E8%A1%A81.png"></p>
+<p>图1：类A的虚表示意图</p>
+<p><strong>虚表是一个指针数组</strong>，其元素是<strong>虚函数的指针</strong>，每个元素对应一个虚函数的函数指针。需要指出的是，普通的函数即非虚函数，其调用并不需要经过虚表，所以虚表的元素并不包括普通函数的函数指针。<br>虚表内的条目，即<strong>虚函数指针的赋值发生在编译器的编译</strong>阶段，也就是说在代码的编译阶段，虚表就可以构造出来了。</p>
+<h2 id="虚表指针"><a href="#虚表指针" class="headerlink" title="虚表指针"></a>虚表指针</h2><ol>
+<li>虚表是属于类的，而不是属于某个具体的对象，一个类只需要一个虚表即可。同一个类的所有对象都使用同一个虚表。</li>
+<li>为了指定对象的虚表，<strong>对象内部包含一个虚表的指针</strong>，来指向自己所使用的虚表。</li>
+<li>为了让每个包含虚表的类的对象都拥有一个虚表指针，<strong>编译器在类中添加了一个指针，<code>*__vptr</code>，用来指向虚表</strong>。</li>
+<li>这样，当类的对象在创建时便拥有了这个指针，且这个指针的值会自动被设置为指向类的虚表</li>
+</ol>
+<p><img src="/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%99%9A%E8%A1%A81.png"></p>
+<p>图 2：对象与它的虚表</p>
+<p>上面指出，一个继承类的基类如果包含虚函数，那个<strong>这个继承类也有拥有自己的虚表</strong>，故这个继承类的对象也包含一个虚表指针，用来指向它的虚表。</p>
+<h1 id="动态绑定"><a href="#动态绑定" class="headerlink" title="动态绑定"></a>动态绑定</h1><p>C++ 是如何利用虚表和虚表指针来实现动态绑定</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">vfunc1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">vfunc2</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> m_data1, m_data2;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> :</span> <span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">vfunc1</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> m_data3;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span>:</span> <span class="keyword">public</span> B &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">vfunc2</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> m_data1, m_data4;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>类 A 是基类，类 B 继承类 A，类 C 又继承类 B。类 A，类 B，类 C，其对象模型如下图 3 所示。</p>
+<p><img src="/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A1.png" alt="动态绑定1"></p>
+<p>图 3：类 A，类 B，类 C 的对象模型</p>
+<p>由于这三个类都有虚函数（无论纯虚），故编译器为每个类都创建了一个虚表，即类 A 的虚表（A vtbl），类 B 的虚表（B vtbl），类 C 的虚表（C vtbl）。类 A，类 B，类 C 的对象都拥有一个虚表指针，<code>*__vptr</code>，用来指向自己所属类的虚表。</p>
+<ul>
+<li>类 A 包括两个虚函数，故 A vtbl 包含两个指针，分别指向<code>A::vfunc1()</code>和<code>A::vfunc2()</code>。</li>
+<li>类 B 继承于类 A，故类 B 可以调用类 A 的函数，但由于类 B 重写了<code>B::vfunc1()</code>函数，故 B vtbl 的两个指针分别指向<code>B::vfunc1()</code>和<code>A::vfunc2()</code>。</li>
+<li>类 C 继承于类 B，故类 C 可以调用类 B 的函数，但由于类 C 重写了<code>C::vfunc2()</code>函数，故 C vtbl 的两个指针分别指向<code>B::vfunc1()</code>（指向继承的最近的一个类的函数）和<code>C::vfunc2()</code>。</li>
+</ul>
+<p>特点：<strong>对象的虚表指针用来指向自己所属类的虚表，虚表中的指针会指向其继承的最近的一个类的虚函数</strong></p>
+<p>非虚函数的调用不用经过虚表，故不需要虚表中的指针指向这些函数。</p>
+<p>EX：</p>
+<p>假设我们定义一个类 B 的对象。由于 <code>bObject</code>是类 B 的一个对象，故<code>bObject</code>包含一个虚表指针，指向类 B 的虚表。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int main() </span><br><span class="line">&#123;</span><br><span class="line">    B bObject;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在，我们声明一个类 A 的指针<code>p</code>来指向对象<code>bObject</code>。虽然<code>p</code>是基类的指针只能指向基类的部分，但是虚表指针亦属于基类部分，所以<code>p</code>可以访问到对象<code>bObject</code>的虚表指针。<code>bObject</code>的虚表指针指向类 B 的虚表，所以<code>p</code>可以访问到 B vtbl。如图 3 所示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int main() </span><br><span class="line">&#123;</span><br><span class="line">    B bObject;</span><br><span class="line">    A *p = &amp; bObject;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int main() </span><br><span class="line">&#123;</span><br><span class="line">    B bObject;</span><br><span class="line">    A *p = &amp; bObject;</span><br><span class="line">    p-&gt;vfunc1();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们使用<code>p</code>来调用<code>vfunc1()</code>函数时</p>
+<p>程序在执行<code>p-&gt;vfunc1()</code>时，会发现<code>p</code>是个指针，且调用的函数是虚函数，接下来便会进行以下的步骤。</p>
+<ol>
+<li>首先，根据虚表指针<code>p-&gt;__vptr</code>来访问对象<code>bObject</code>对应的虚表。虽然指针<code>p</code>是基类<code>A*</code>类型，但是**<code>*__vptr</code>也是基类的一部分**，所以可以通过<code>p-&gt;__vptr</code>可以访问到对象对应的虚表。</li>
+<li>然后，在虚表中查找所调用的函数对应的条目。由于虚表在编译阶段就可以构造出来了，所以可以根据所调用的函数定位到虚表中的对应条目。对于 <code>p-&gt;vfunc1()</code>的调用，B vtbl 的第一项即是<code>vfunc1</code>对应的条目。</li>
+<li>最后，根据虚表中找到的函数指针，调用函数。从图 3 可以看到，B vtbl 的第一项指向<code>B::vfunc1()</code>，所以 <code>p-&gt;vfunc1()</code>实质会调用<code>B::vfunc1()</code> 函数。</li>
+</ol>
+<p>如果<code>p</code>指向类 A 的对象</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int main() </span><br><span class="line">&#123;</span><br><span class="line">    A aObject;</span><br><span class="line">    A *p = &amp;aObject;</span><br><span class="line">    p-&gt;vfunc1();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当<code>aObject</code>在创建时，它的虚表指针<code>__vptr</code>已设置为指向 A vtbl，这样<code>p-&gt;__vptr</code>就指向 A vtbl。<code>vfunc1</code>在 A vtbl 对应在条目指向了<code>A::vfunc1()</code>函数，所以 <code>p-&gt;vfunc1()</code>实质会调用<code>A::vfunc1()</code>函数。</p>
+<p>可以把以上三个调用函数的步骤用以下表达式来表示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(*(p-&gt;__vptr)[n])(p)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，通过使用这些虚函数表，即使使用的是基类的指针来调用函数，也可以达到正确调用运行中实际对象的虚函数。</p>
+<p>我们把经过虚表调用虚函数的过程称为动态绑定，其表现出来的现象称为运行时多态。动态绑定区别于传统的函数调用，传统的函数调用我们称之为静态绑定，即函数的调用在编译阶段就可以确定下来了。</p>
+<p>那么，什么时候会执行函数的动态绑定？这需要符合以下三个条件。</p>
+<ul>
+<li>通过指针来调用函数</li>
+<li>指针 upcast 向上转型（继承类向基类的转换称为 upcast，关于什么是 upcast，可以参考本文的参考资料）</li>
+<li>调用的是虚函数</li>
+</ul>
+<p>如果一个函数调用符合以上三个条件，编译器就会把该函数调用编译成动态绑定，其函数的调用过程走的是上述通过虚表的机制。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/21/%E5%BD%92%E4%B8%80%E5%8C%96%E3%80%81%E6%A0%87%E5%87%86%E5%8C%96%E3%80%81%E6%AD%A3%E5%88%99%E5%8C%96/" rel="prev" title="归一化、标准化、正则化">
+                  <i class="fa fa-chevron-left"></i> 归一化、标准化、正则化
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">cyg</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{&quot;enable&quot;:true,&quot;github_id&quot;:&quot;gyyc233&quot;,&quot;repo&quot;:&quot;gyyc233.github.io&quot;,&quot;client_id&quot;:&quot;0c04f54434c3a39e65b6&quot;,&quot;client_secret&quot;:&quot;796c7805b9ca6b81ac0a0b134a0f31cc0de73139&quot;,&quot;admin_user&quot;:&quot;gyyc233&quot;,&quot;distraction_free_mode&quot;:true,&quot;proxy&quot;:&quot;https:&#x2F;&#x2F;cors-anywhere.azm.workers.dev&#x2F;https:&#x2F;&#x2F;github.com&#x2F;login&#x2F;oauth&#x2F;access_token&quot;,&quot;language&quot;:null,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;gitalk@1.7.2&#x2F;dist&#x2F;gitalk.min.js&quot;,&quot;integrity&quot;:&quot;sha256-Pmj85ojLaPOWwRtlMJwmezB&#x2F;Qg8BzvJp5eTzvXaYAfA&#x3D;&quot;},&quot;path_md5&quot;:&quot;d56fbf494b4cb6ce02d42bf81da1436c&quot;}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"kesyoban"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":false},"rect":"opacity:0.7","log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
