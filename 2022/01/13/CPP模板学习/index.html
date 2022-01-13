@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
+<meta name="description" content="模板是 C++ 支持参数化多态的工具，使用模板可以使用户为类或者函数声明一种一般模式。  C++ 的标准库提供许多有用的函数大多结合了模板的观念，如 STL 以及 IO Stream。   模板是一种对类型进行参数化的工具；通常有两种形式：函数模板和类模板:  函数模板 针对仅参数类型不同的函数； 类模板 针对仅数据成员和成员函数类型不同的类.  使用模板的目的就是能够让程序员编写与类型无关的代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CPP模板学习">
+<meta property="og:url" content="http://example.com/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="摸鱼且很菜blog">
+<meta property="og:description" content="模板是 C++ 支持参数化多态的工具，使用模板可以使用户为类或者函数声明一种一般模式。  C++ 的标准库提供许多有用的函数大多结合了模板的观念，如 STL 以及 IO Stream。   模板是一种对类型进行参数化的工具；通常有两种形式：函数模板和类模板:  函数模板 针对仅参数类型不同的函数； 类模板 针对仅数据成员和成员函数类型不同的类.  使用模板的目的就是能够让程序员编写与类型无关的代">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/image-20220112144311394.png">
+<meta property="og:image" content="http://example.com/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/image-20220112144426447.png">
+<meta property="article:published_time" content="2022-01-13T15:26:54.000Z">
+<meta property="article:modified_time" content="2022-01-13T15:32:06.492Z">
+<meta property="article:author" content="cyg">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/image-20220112144311394.png">
+
+
+<link rel="canonical" href="http://example.com/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2022&#x2F;01&#x2F;13&#x2F;CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0&#x2F;&quot;,&quot;path&quot;:&quot;2022&#x2F;01&#x2F;13&#x2F;CPP模板学习&#x2F;&quot;,&quot;title&quot;:&quot;CPP模板学习&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>CPP模板学习 | 摸鱼且很菜blog</title><script src="/js/config.js"></script>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?<55216f0c2c8931a0d636f20bd9836bd4>"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">摸鱼且很菜blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF"><span class="nav-number">1.</span> <span class="nav-text">函数模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E6%A8%A1%E6%9D%BF"><span class="nav-number">2.</span> <span class="nav-text">类模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E7%9A%84%E9%9D%9E%E7%B1%BB%E5%9E%8B%E5%BD%A2%E5%8F%82"><span class="nav-number">3.</span> <span class="nav-text">模板的非类型形参</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E6%A8%A1%E6%9D%BF%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A8%A1%E6%9D%BF%E7%B1%BB%E5%9E%8B%E5%BD%A2%E5%8F%82"><span class="nav-number">4.</span> <span class="nav-text">类模板的默认模板类型形参</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="nav-number">5.</span> <span class="nav-text">模板实例化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="nav-number">5.1.</span> <span class="nav-text">隐式实例化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0%E5%AE%8C%E6%88%90%E6%A8%A1%E6%9D%BF%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="nav-number">5.2.</span> <span class="nav-text">简介调用函数完成模板实例化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="nav-number">5.3.</span> <span class="nav-text">显式实例化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="nav-number">5.3.1.</span> <span class="nav-text">函数模板实例化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E6%A8%A1%E6%9D%BF%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="nav-number">5.3.2.</span> <span class="nav-text">类模板实例化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF%E8%B0%83%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">5.4.</span> <span class="nav-text">函数模板调用方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E6%A8%A1%E6%9D%BF%E5%AE%9E%E5%8F%82%E8%B0%83%E7%94%A8"><span class="nav-number">5.4.1.</span> <span class="nav-text">隐式模板实参调用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E6%A8%A1%E6%9D%BF%E5%AE%9E%E5%8F%82%E8%B0%83%E7%94%A8"><span class="nav-number">5.4.2.</span> <span class="nav-text">显示模板实参调用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%8C%96"><span class="nav-number">5.5.</span> <span class="nav-text">特化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E7%9A%84%E7%89%B9%E5%8C%96%EF%BC%88%E5%85%B7%E4%BD%93%E5%8C%96%EF%BC%89%E5%92%8C%E5%81%8F%E7%89%B9%E5%8C%96"><span class="nav-number">6.</span> <span class="nav-text">模板的特化（具体化）和偏特化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E7%B1%BB%E7%9A%84%E7%BB%A7%E6%89%BF"><span class="nav-number">7.</span> <span class="nav-text">模板类的继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E5%AE%9E%E4%BE%8B%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-number">8.</span> <span class="nav-text">模板实例化问题</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="cyg"
+      src="/images/favorite.jpg">
+  <p class="site-author-name" itemprop="name">cyg</p>
+  <div class="site-description" itemprop="description">超越顶级明镜止水之心</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gyyc233" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gyyc233" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favorite.jpg">
+      <meta itemprop="name" content="cyg">
+      <meta itemprop="description" content="超越顶级明镜止水之心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="摸鱼且很菜blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CPP模板学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-01-13 23:26:54 / 修改时间：23:32:06" itemprop="dateCreated datePublished" datetime="2022-01-13T23:26:54+08:00">2022-01-13</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <ol>
+<li><p>模板是 C++ 支持参数化多态的工具，使用模板可以使用户为类或者函数声明一种一般模式。</p>
+</li>
+<li><p>C++ 的标准库提供许多有用的函数大多结合了模板的观念，如 STL 以及 IO Stream。</p>
+</li>
+</ol>
+<p>模板是一种对类型进行参数化的工具；通常有两种形式：函数模板和类模板:</p>
+<ul>
+<li>函数模板 针对仅参数类型不同的函数；</li>
+<li>类模板 针对仅数据成员和成员函数类型不同的类.</li>
+</ul>
+<p>使用模板的目的就是能够让程序员编写与类型无关的代码.</p>
+<span id="more"></span>
+
+<h2 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> template &lt;typename 形参名，typename 形参名，......&gt; </span><br><span class="line"> 返回类型 函数名(参数列表)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">      函数体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>template 和 class 是关键字，class 可以用 typename  关键字代替，在这里 typename  和 class 没区别，</p>
+</li>
+<li><p>&lt;&gt; 括号中的参数叫模板形参，模板形参和函数形参很相像，模板形参不能为空。</p>
+</li>
+<li><p>模板形参需要调用该模板函数时提供的<strong>模板实参来初始化模板形参</strong></p>
+</li>
+<li><p>一旦编译器确定了实际的模板实参类型就称他<strong>实例化了函数模板的一个实例</strong>。</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template &lt;class T&gt; void swap(T&amp; a, T&amp; b)&#123;&#125;，</span><br></pre></td></tr></table></figure>
+
+<p>当调用这样的模板函数时类型T就会被被调用时的类型所代替，比如 swap(a,b) 其中 a 和 b 是 int  型，这时模板函数 swap  中的形参 T  就会被 int  所代替，模板函数就变为 swap(int &amp;a, int &amp;b)。而当 swap(c,d) 其中 c 和 d 是 double 类型时，模板函数会被替换为 swap(double &amp;a, double &amp;b)，这样就实现了函数的实现与类型无关的代码。</p>
+<p>注意：对于函数模板而言不存在 h(int,int) 这样的调用，不能在函数调用的参数中指定模板形参的类型，对函数模板的调用应使用实参推演来进行，即只能进行 h(2,3) 这样的调用，或者 int a, b; h(a,b)。</p>
+<h2 id="类模板"><a href="#类模板" class="headerlink" title="类模板"></a>类模板</h2><p>类模板的格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class  形参名，class 形参名，…&gt;</span><br><span class="line">class 类名&#123; ... &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>类模板和函数模板都是以 template 开始后接模板形参列表组成，模板形参不能为空，一但声明了类模板就可以用类模板的形参名声明类中的成员变量和成员函数，即可以在类中使用内置类型的地方都可以使用模板形参名来声明。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class T&gt; class A</span><br><span class="line">  &#123;</span><br><span class="line">       public: </span><br><span class="line">       T a;</span><br><span class="line">       T b; </span><br><span class="line">       T hy(T c, T &amp;d);</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在类 A 中声明了两个类型为T的成员变量 a 和 b，还声明了一个返回类型为 T 带两个参数类型为 T 的函数 hy。</p>
+<blockquote>
+<p>类模板对象的创建：比如一个模板类 A，则使用类模板创建对象的方法为 A m ;在类 A 后面跟上一个 &lt;&gt; 尖括号并在里面填上相应的类型，这样的话类 A 中凡是用到模板形参的地方都会被 int 所代替。当类模板有两个模板形参时创建对象的方法为 A&lt;int, double&gt; m; 类型之间用逗号隔开。</p>
+</blockquote>
+<p><strong>在类模板外部定义成员函数</strong>的方法为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template&lt;模板形参列表&gt; 函数返回类型 类名&lt;模板形参名&gt;::函数名(参数列表)&#123;函数体&#125;</span><br></pre></td></tr></table></figure>
+
+<p>比如有两个模板形参 T1，T2 的类 A 中含有一个 void h() 函数，则定义该函数的语法为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class T1,class T2&gt; void A&lt;T1,T2&gt;::h()&#123;&#125;。</span><br></pre></td></tr></table></figure>
+
+<p>注意：当在类外面定义类的成员时 template 后面的模板形参应与要定义的类的模板形参一致。模板的声明或定义只能在全局，命名空间或类范围内进行。即不能在局部范围，函数内进行，比如不能在 main 函数中声明或定义一个模板。</p>
+<h2 id="模板的非类型形参"><a href="#模板的非类型形参" class="headerlink" title="模板的非类型形参"></a>模板的非类型形参</h2><ol>
+<li>非类型模板形参：模板的非类型形参也就是内置类型形参，如 template&lt;class T, int a&gt; class B{} ; 其中int a就是非类型的模板形参。</li>
+<li>非类型形参在模板定义的内部是常量值，也就是说<strong>非类型形参在模板的内部是常量</strong>。</li>
+<li><strong>非类型模板的形参只能是整型，指针和引用</strong>，像 double，String, String ** 这样的类型是不允许的。但是 double &amp;，double *，对象的引用或指针是正确的。</li>
+<li><strong>调用非类型模板形参的实参必须是一个常量表达式</strong>，即他必须能在编译时计算出结果</li>
+<li>注意：任何局部对象，局部变量，局部对象的地址，局部变量的地址都不是一个常量表达式，都不能用作非类型模板形参的实参。</li>
+<li><strong>全局变量的地址或引用</strong>，<strong>全局对象的地址或引用</strong> <strong>const 类型变量</strong>是常量表达式，可以用作非类型模板形参的实参。</li>
+<li><strong>sizeof 表达式的结果</strong>是一个常量表达式，也能用作非类型模板形参的实参。</li>
+<li>当模板的形参是整型时调用该模板时的实参必须是整型的，且在编译期间是常量，比如 template &lt;class T, int a&gt; class A{}; 如果有 int b，这时 A&lt;int, b&gt; m;将出错，因为 b 不是常量，如果 const int b，这时 A&lt;int, b&gt; m; 就是正确的，因为这时 b 是常量。</li>
+<li>非类型形参一般不应用于函数模板中，比如有函数模板 template&lt;class T, int a&gt; void h(T b){} ，若使用 h(2) 调用会出现无法为非类型形参 a 推演出参数的错误，对这种模板函数可以用显示模板实参来解决，如用 h&lt;int, 3&gt;(2) 这样就把非类型形参 a 设置为整数 3。显示模板实参在后面介绍。</li>
+<li>非类型模板形参的形参和实参间所允许的转换:<ul>
+<li>允许从数组到指针，从函数到指针的转换。如：template &lt;int *a&gt; class A{}; int b[1]; A<b> m;即数组到指针的转换。</li>
+<li>const 修饰符的转换。如：template&lt;const int *a&gt; class A{}; int b; A&lt;&amp;b&gt; m; 即从 int * 到 const int * 的转换。</li>
+<li>提升转换。如：template<int a> class A{}; const short b=2; A<b> m; 即从 short 到 int 的提升转换</li>
+<li>整值转换。如：template<unsigned int a> class A{}; A&lt;3&gt; m; 即从 int  到 unsigned int 的转换。</li>
+<li>常规转换。</li>
+</ul>
+</li>
+</ol>
+<h2 id="类模板的默认模板类型形参"><a href="#类模板的默认模板类型形参" class="headerlink" title="类模板的默认模板类型形参"></a>类模板的默认模板类型形参</h2><ol>
+<li><p>可以为类模板的类型形参提供默认值，但不能为函数模板的类型形参提供默认值。函数模板和类模板都可以为模板的非类型形参提供默认值。</p>
+</li>
+<li><p>类模板的类型形参默认值形式为：template&lt;class T1, class T2=int&gt; class A{};为第二个模板类型形参T2提供int型的默认值。</p>
+</li>
+<li><p>类模板类型形参默认值和函数的默认参数一样，如果有多个类型形参则从<strong>第一个形参设定了默认值之后</strong>的所有模板形参都要设定默认值，比如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class T1=int, class T2&gt;class A&#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>就是错误的，因为T1给出了默认值，而T2没有设定。</p>
+</li>
+<li><p>在类模板的外部定义类中的成员时 template 后的<strong>形参表应省略默认的形参类型</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class  T1, class T2=int&gt; class A&#123;public: void h();&#125;; </span><br></pre></td></tr></table></figure>
+
+<p> 定义方法为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class T1,class T2&gt; void A&lt;T1,T2&gt;::h()&#123;&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="模板实例化"><a href="#模板实例化" class="headerlink" title="模板实例化"></a>模板实例化</h2><blockquote>
+<p>模板的实例化指函数模板（类模板）生成模板函数（模板类）的过程。</p>
+<p>对于函数模板而言，模板实例化之后，会生成一个真正的函数。</p>
+<p>类模板经过实例化之后，只是完成了类的定义，模板类的成员函数需要到调用时才会被初始化。模板的实例化分为隐式实例化和显示实例化。</p>
+</blockquote>
+<p>C++ 只有模板显式实例化 (explicit instantiation), 隐式实例化 (implicit instantiation) ,特化 (specialization,也译作具体化，偏特化)。</p>
+<p>首先考虑如下模板函数代码:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">template &lt;typename T&gt;  </span><br><span class="line">void swap(T &amp;a, T &amp;b)</span><br><span class="line">&#123;  </span><br><span class="line">...  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<h3 id="隐式实例化"><a href="#隐式实例化" class="headerlink" title="隐式实例化"></a>隐式实例化</h3><p>模板函数不是真正的函数定义，他只是如其名提供一个模板，<strong>模板只有在运行时才会生成相应的实例</strong>，隐式实例化就是这种情况:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int main()&#123;  </span><br><span class="line">    ....  </span><br><span class="line">    swap&lt;int&gt;(a,b);  </span><br><span class="line">    ....  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p><strong>它会在运行到这里的时候才生成相应的实例，很显然的影响效率</strong> 这里顺便提一下 swap(a,b) ;中的<int>是可选的,因为<strong>编译器可以根据函数参数类型自动进行判断</strong>,也就是说如果编译器不不能自动判断的时候这个就是必要的。</p>
+<h3 id="简介调用函数完成模板实例化"><a href="#简介调用函数完成模板实例化" class="headerlink" title="简介调用函数完成模板实例化"></a>简介调用函数完成模板实例化</h3><blockquote>
+<p>将函数入口地址传给一个函数指针，通过函数指针完成函数调用。如果传递给函数指针不是一个真正的函数，那么编译器就会寻找同名的函数模板进行参数推演，进而完成函数模板的实例化。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">    cout&lt;&lt;t&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//入参为函数指针</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">invoke</span><span class="params">(<span class="keyword">void</span> (*p)(<span class="keyword">int</span>))</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num=<span class="number">10</span>;</span><br><span class="line">    <span class="built_in">p</span>(num);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">invoke</span>(func);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="显式实例化"><a href="#显式实例化" class="headerlink" title="显式实例化"></a>显式实例化</h3><p>显示实例化也称为外部实例化。<strong>在不发生函数调用的时候讲函数模板实例化，或者在不适用类模板的时候将类模板实例化称之为模板显示实例化。</strong></p>
+<p>前面已经提到隐式实例化可能影响效率,所以<strong>需要提高效率的显式实例化</strong>,<strong>显式实例化在编译期间就会生成实例</strong>,方法如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template void swap&lt;int&gt;(int &amp;a,int &amp;b); </span><br></pre></td></tr></table></figure>
+
+<p>这样就不会影响运行时的效率，但编译时间随之增加。</p>
+<h4 id="函数模板实例化"><a href="#函数模板实例化" class="headerlink" title="函数模板实例化"></a>函数模板实例化</h4><p>对于函数模板而言，不管是否发生函数调用，都可以通过<strong>显示实例化声明</strong>将函数模板实例化，格式为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template [函数返回类型] [函数模板名]&lt;实际类型列表&gt;（函数参数列表）</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template <span class="keyword">void</span> func&lt;int&gt;(<span class="keyword">const</span> int&amp;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="类模板实例化"><a href="#类模板实例化" class="headerlink" title="类模板实例化"></a>类模板实例化</h4><p>对于类模板而言，不管是否生成一个模板类的对象，都可以直接通过显示实例化声明将类模板实例化，格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template class [类模板名]&lt;实际类型列表&gt;</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template class theclass&lt;int&gt;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="函数模板调用方式"><a href="#函数模板调用方式" class="headerlink" title="函数模板调用方式"></a>函数模板调用方式</h3><h4 id="隐式模板实参调用"><a href="#隐式模板实参调用" class="headerlink" title="隐式模板实参调用"></a>隐式模板实参调用</h4><p>在发生函数模板的调用时，不显示给出模板参数而经过参数推演，称之为函数模板的隐式模板实参调用（隐式调用）。如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template &lt;typename T&gt; void func(T t)&#123;</span><br><span class="line">    cout&lt;&lt;t&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line">    func(5);//隐式模板实参调用</span><br></pre></td></tr></table></figure>
+
+<h4 id="显示模板实参调用"><a href="#显示模板实参调用" class="headerlink" title="显示模板实参调用"></a>显示模板实参调用</h4><p>在发生函数模板的调用时，显示给出模板参数而不需要经过参数推演，称之为函数模板的显示模板实参调用（显示调用）。</p>
+<p>显示模板实参调用在参数推演不成功的情况下是有必要的。考察如下程序。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="function">T <span class="title">Max</span><span class="params">(<span class="keyword">const</span> T&amp; t1,<span class="keyword">const</span> T&amp; t2)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (t1&gt;t2)?t1:t2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i=<span class="number">5</span>;</span><br><span class="line">    <span class="comment">//cout&lt;&lt;Max(i,&#x27;a&#x27;)&lt;&lt;endl; //无法通过编译</span></span><br><span class="line">    cout&lt;&lt;Max&lt;<span class="keyword">int</span>&gt;(i,<span class="string">&#x27;a&#x27;</span>)&lt;&lt;endl; <span class="comment">//显示调用，通过编译</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>直接采用函数调用Max(i,’a’)会产生编译错误，因为i和’a’具有不同的数据类型，无法从这两个参数中进行类型推演。而采用Max&lt; int&gt;(i,’a’)调用后，函数模板的实例化不需要经过参数推演，而函数的第二个实参也可以由char转换为int型，从而成功完成函数调用。</p>
+<blockquote>
+<p><strong>编程过程中，建议采用显示模板实参的方式调用函数模板，这样提高了代码的可读性，便于代码的理解和维护。</strong></p>
+</blockquote>
+<h3 id="特化"><a href="#特化" class="headerlink" title="特化"></a>特化</h3><p>这个 swap 可以处理一些基本类型如 long int double ,但是如果<strong>想处理用户自定义的类型就不行了,特化就是为了解决这个问题而出现的:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">template &lt;&gt; void swap&lt;job&gt;(job a,job b)&#123;...&#125; </span><br></pre></td></tr></table></figure>
+
+<h2 id="模板的特化（具体化）和偏特化"><a href="#模板的特化（具体化）和偏特化" class="headerlink" title="模板的特化（具体化）和偏特化"></a>模板的特化（具体化）和偏特化</h2><p>类模板</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1,<span class="keyword">typename</span> T2&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Test</span>(T1 i,T2 j):<span class="built_in">a</span>(i),<span class="built_in">b</span>(j)&#123;cout&lt;&lt;<span class="string">&quot;模板类&quot;</span>&lt;&lt;endl;&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    T1 a;</span><br><span class="line">    T2 b;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span>&lt;&gt;   <span class="comment">//全特化，由于是全特化，参数都指定了，参数列表故为空。</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span>&lt;</span><span class="keyword">int</span> ,<span class="keyword">char</span>&gt;&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Test</span>(<span class="keyword">int</span> i,<span class="keyword">char</span> j):<span class="built_in">a</span>(i),<span class="built_in">b</span>(j)&#123;cout&lt;&lt;<span class="string">&quot;全特化&quot;</span>&lt;&lt;endl;&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">int</span> b;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T2&gt; <span class="comment">//由于只指定了一部分参数，剩下的未指定的需在参数列表中，否则报错。</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span>&lt;</span><span class="keyword">char</span>,T2&gt;&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Test</span>(<span class="keyword">char</span> i,T2 j):<span class="built_in">a</span>(j),<span class="built_in">b</span>(j)&#123;cout&lt;&lt;<span class="string">&quot;个数偏特化&quot;</span>&lt;&lt;endl;&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span> a;</span><br><span class="line">    T2 b;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1,<span class="keyword">typename</span> T2&gt; <span class="comment">//这是范围上的偏特化</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span>&lt;</span>T1*,T2*&gt;&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Test</span>(T1* i,T2* j):<span class="built_in">a</span>(i),<span class="built_in">b</span>(j)&#123;cout&lt;&lt;<span class="string">&quot;指针偏特化&quot;</span>&lt;&lt;endl;&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    T1* a;</span><br><span class="line">    T2* b;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1,<span class="keyword">typename</span> T2&gt;<span class="comment">//同理这也是范围上的偏特化</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span>&lt;</span>T1 <span class="keyword">const</span>,T2 <span class="keyword">const</span>&gt;&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Test</span>(T1 i,T2 j):<span class="built_in">a</span>(i),<span class="built_in">b</span>(j)&#123;cout&lt;&lt;<span class="string">&quot;const偏特化&quot;</span>&lt;&lt;endl;&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    T1 a;</span><br><span class="line">    T2 b;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="function">Test&lt;<span class="keyword">double</span>,<span class="keyword">double</span>&gt; <span class="title">t1</span><span class="params">(<span class="number">0.1</span>,<span class="number">0.2</span>)</span></span>;</span><br><span class="line">    <span class="function">Test&lt;<span class="keyword">int</span>,<span class="keyword">char</span>&gt; <span class="title">t2</span><span class="params">(<span class="number">1</span>,<span class="string">&#x27;A&#x27;</span>)</span></span>;</span><br><span class="line">    <span class="function">Test&lt;<span class="keyword">char</span>,<span class="keyword">bool</span>&gt; <span class="title">t3</span><span class="params">(<span class="string">&#x27;A&#x27;</span>,<span class="literal">true</span>)</span></span>;</span><br><span class="line">    <span class="function">Test&lt;<span class="keyword">int</span>*,<span class="keyword">int</span>*&gt; <span class="title">t4</span><span class="params">(&amp;a,&amp;a)</span></span>;</span><br><span class="line">    <span class="function">Test&lt;<span class="keyword">const</span> <span class="keyword">int</span>,<span class="keyword">const</span> <span class="keyword">int</span>&gt; <span class="title">t5</span><span class="params">(<span class="number">1</span>,<span class="number">2</span>)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<p><img src="/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/image-20220112144311394.png"></p>
+<p>函数模板</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">//模板函数</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1,<span class="keyword">typename</span> T2&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(T1 a,T2 b)</span></span>&#123;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;模板函数&quot;</span>&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//全特化</span></span><br><span class="line"><span class="keyword">template</span>&lt;&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">char</span> b)</span></span>&#123;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;全特化&quot;</span>&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//函数不存在偏特化，以下代码是错误的</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">template&lt;typename T2&gt;</span></span><br><span class="line"><span class="comment">void fun(char a,T2 b)&#123;</span></span><br><span class="line"><span class="comment">    cout&lt;&lt;&quot;偏特化&quot;&lt;&lt;ednl;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">char</span> b=<span class="string">&#x27;A&#x27;</span>;</span><br><span class="line">    <span class="built_in">fun</span>(a,a);</span><br><span class="line">    <span class="built_in">fun</span>(a,b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<p><img src="/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/image-20220112144426447.png"></p>
+<h2 id="模板类的继承"><a href="#模板类的继承" class="headerlink" title="模板类的继承"></a>模板类的继承</h2><p>模板类的继承包括四种：：</p>
+<ul>
+<li>1、普通类继承模板类）</li>
+<li>2、（模板类继承了普通类（非常常见））</li>
+<li>3、类模板继承类模板</li>
+<li>4、模板类继承类模板，即继承模板参数给出的基类</li>
+</ul>
+<p>其中，普通类继承模板类比较简单，如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class T&gt;</span><br><span class="line">class TBase&#123;</span><br><span class="line">    T data;</span><br><span class="line">……</span><br><span class="line">&#125;;</span><br><span class="line">class Derived:public TBase&lt;int&gt;&#123;</span><br><span class="line">……</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>模板类继承普通类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class TBase&#123;</span><br><span class="line">……</span><br><span class="line">&#125;;</span><br><span class="line">template&lt;class T&gt;</span><br><span class="line">class TDerived:public TBase&#123;</span><br><span class="line">T data;</span><br><span class="line">……</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>类模板继承类模板：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class T&gt;</span><br><span class="line">class TBase&#123;</span><br><span class="line">T data1;</span><br><span class="line">……</span><br><span class="line">&#125;;</span><br><span class="line">template&lt;class T1,class T2&gt;</span><br><span class="line">class TDerived:public TBase&lt;T1&gt;&#123;</span><br><span class="line">T2 data2;</span><br><span class="line">……</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>模板类继承模板参数给出的基类 ——继承哪个基类由模板参数决定：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">class BaseA&#123;</span><br><span class="line">public:</span><br><span class="line">    BaseA()&#123;cout&lt;&lt;&quot;BaseA founed&quot;&lt;&lt;endl;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class BaseB&#123;</span><br><span class="line">public:</span><br><span class="line">    BaseB()&#123;cout&lt;&lt;&quot;BaseB founed&quot;&lt;&lt;endl;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">template&lt;typename T, int rows&gt;</span><br><span class="line">class BaseC&#123;</span><br><span class="line">private:</span><br><span class="line">    T data;</span><br><span class="line">public:</span><br><span class="line">    BaseC():data(rows)&#123;</span><br><span class="line">        cout&lt;&lt;&quot;BaseC founed &quot;&lt;&lt; data &lt;&lt; endl;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">template&lt;class T&gt;</span><br><span class="line">class Derived:public T&#123;</span><br><span class="line">public:</span><br><span class="line">    Derived():T()&#123;cout&lt;&lt;&quot;Derived founed&quot;&lt;&lt;endl;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void main()</span><br><span class="line">&#123;</span><br><span class="line">    Derived&lt;Base A&gt; x;// BaseA作为基类</span><br><span class="line">    Derived&lt;Base B&gt; y;// BaseB作为基类</span><br><span class="line">    Derived&lt;Base C&lt;int, 3&gt; &gt; z; // BaseC&lt;int,3&gt;作为基类</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="模板实例化问题"><a href="#模板实例化问题" class="headerlink" title="模板实例化问题"></a>模板实例化问题</h2><p>在<strong>我们使用类模板时，只有当代码中使用了类模板的一个实例的名字</strong>，而且上下文环境要求必须存在类的定义时，这个类模板才被实例化：</p>
+<ol>
+<li>声明一个类模板的指针和引用，不会引起类模板的实例化，因为没有必要知道该类的定义</li>
+<li>定义一个类类型的对象时需要该类的定义，因此类模板会被实例化</li>
+<li>在使用 sizeof() 时，它是计算对象的大小，编译器必须根据类型将其实例化出来，所以类模板被实例化.</li>
+<li>new 表达式要求类模板被实例化。</li>
+<li>引用类模板的成员会导致类模板被编译器实例化</li>
+<li>需要注意的是，类模板的成员函数本身也是一个模板。标准 C++ 要求这样的成员函数只有在被调用或者取地址的时候，才被实例化。用来实例化成员函数的类型，就是其成员函数要调用的那个类对象的类型。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/12/19/CPP%E5%B5%8C%E5%A5%97%E4%BB%8E%E5%B1%9E%E5%90%8D%E7%A7%B0%E4%B8%8Etypename/" rel="prev" title="CPP嵌套从属名称与typename">
+                  <i class="fa fa-chevron-left"></i> CPP嵌套从属名称与typename
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div><script src="/js/comments.js"></script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">cyg</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{&quot;enable&quot;:true,&quot;github_id&quot;:&quot;gyyc233&quot;,&quot;repo&quot;:&quot;gyyc233.github.io&quot;,&quot;client_id&quot;:&quot;0c04f54434c3a39e65b6&quot;,&quot;client_secret&quot;:&quot;796c7805b9ca6b81ac0a0b134a0f31cc0de73139&quot;,&quot;admin_user&quot;:&quot;gyyc233&quot;,&quot;distraction_free_mode&quot;:true,&quot;proxy&quot;:&quot;https:&#x2F;&#x2F;cors-anywhere.azm.workers.dev&#x2F;https:&#x2F;&#x2F;github.com&#x2F;login&#x2F;oauth&#x2F;access_token&quot;,&quot;language&quot;:null,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;gitalk@1.7.2&#x2F;dist&#x2F;gitalk.min.js&quot;,&quot;integrity&quot;:&quot;sha256-Pmj85ojLaPOWwRtlMJwmezB&#x2F;Qg8BzvJp5eTzvXaYAfA&#x3D;&quot;},&quot;path_md5&quot;:&quot;2cca33f4b4075381c82300e304b2d46e&quot;}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"kesyoban"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":false},"rect":"opacity:0.7","log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
