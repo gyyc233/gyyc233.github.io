@@ -133,7 +133,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -172,6 +172,100 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/08/CPP%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favorite.jpg">
+      <meta itemprop="name" content="cyg">
+      <meta itemprop="description" content="超越顶级明镜止水之心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="摸鱼且很菜blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/04/08/CPP%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/" class="post-title-link" itemprop="url">CPP智能指针理解</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-04-08 16:18:59 / 修改时间：16:20:18" itemprop="dateCreated datePublished" datetime="2022-04-08T16:18:59+08:00">2022-04-08</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="C-标准库（STL）中"><a href="#C-标准库（STL）中" class="headerlink" title="C++ 标准库（STL）中"></a>C++ 标准库（STL）中</h2><p>头文件：<code>#include &lt;memory&gt;</code></p>
+<h4 id="C-11中的智能指针"><a href="#C-11中的智能指针" class="headerlink" title="C++ 11中的智能指针"></a>C++ 11中的智能指针</h4><ol>
+<li>shared_ptr</li>
+<li>unique_ptr</li>
+<li>weak_ptr</li>
+<li>auto_ptr（被 C++11 弃用）</li>
+</ol>
+<ul>
+<li>Class shared_ptr 实现共享式拥有（shared ownership）概念。<strong>多个智能指针指向相同对象</strong>。该对象和其相关资源会在 “最后一个 reference 被销毁” 时被释放。为了在结构较复杂的情景中执行上述工作，标准库提供 weak_ptr、bad_weak_ptr 和 enable_shared_from_this 等辅助类。</li>
+<li>Class unique_ptr 实现独占式拥有（exclusive ownership）或严格拥有（strict ownership）概念，<strong>保证同一时间内只有一个智能指针可以指向该对象</strong>。你可以移交拥有权。它对于避免内存泄漏（resource leak）——如 new 后忘记 delete ——特别有用。</li>
+</ul>
+<h3 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h3><p>多个智能指针可以共享同一个对象，对象的最末一个拥有着有责任销毁对象，并清理与该对象相关的所有资源。</p>
+<ul>
+<li>支持定制型删除器（custom deleter），可防范 Cross-DLL 问题（对象在动态链接库（DLL）中被 new 创建，却在另一个 DLL 内被 delete 销毁）、自动解除互斥锁</li>
+</ul>
+<h3 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h3><p>weak_ptr 允许你共享但不拥有某对象，一旦最末一个拥有该对象的智能指针失去了所有权，任何 weak_ptr 都会自动成空（empty）。</p>
+<p>因此，在 default 和 copy 构造函数之外，weak_ptr 只提供 “接受一个 shared_ptr” 的构造函数。</p>
+<ul>
+<li>可打破环状引用（cycles of references，两个其实已经没有被使用的对象彼此互指，使之看似还在 “被使用” 的状态）的问题</li>
+</ul>
+<h3 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h3><p>unique_ptr 是 C++11 才开始提供的类型，是一种在异常时可以帮助避免资源泄漏的智能指针。采用独占式拥有，意味着可以确保<strong>一个对象和其相应的资源同一时间只被一个 pointer 拥有</strong>。</p>
+<p>一旦拥有着被销毁或编程 empty，或开始拥有另一个对象，先前拥有的那个对象就会被销毁，其任何相应资源亦会被释放。</p>
+<ul>
+<li>unique_ptr 用于取代 auto_ptr</li>
+</ul>
+<h3 id="auto-ptr"><a href="#auto-ptr" class="headerlink" title="auto_ptr"></a>auto_ptr</h3><p>被 c++11 弃用，原因是缺乏语言特性如 “针对构造和赋值” 的 <code>std::move</code> 语义，以及其他瑕疵。</p>
+<h3 id="auto-ptr-与-unique-ptr-比较"><a href="#auto-ptr-与-unique-ptr-比较" class="headerlink" title="auto_ptr 与 unique_ptr 比较"></a>auto_ptr 与 unique_ptr 比较</h3><ul>
+<li>auto_ptr 可以赋值拷贝，复制拷贝后所有权转移；unqiue_ptr 无拷贝赋值语义，但实现了<code>move</code> 语义；</li>
+<li>auto_ptr 对象不能管理数组（析构调用 <code>delete</code>），unique_ptr 可以管理数组（析构调用 <code>delete[]</code> ）；</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -873,78 +967,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/06/03/python-%E5%AE%9E%E7%8E%B0PCA/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/01/C-%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/favorite.jpg">
-      <meta itemprop="name" content="cyg">
-      <meta itemprop="description" content="超越顶级明镜止水之心">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="摸鱼且很菜blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/06/01/C-%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/" class="post-title-link" itemprop="url">C++中的函数指针</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2021-06-01 23:18:42 / 修改时间：23:57:39" itemprop="dateCreated datePublished" datetime="2021-06-01T23:18:42+08:00">2021-06-01</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/06/01/C-%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

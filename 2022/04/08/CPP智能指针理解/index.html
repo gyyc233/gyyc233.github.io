@@ -20,28 +20,28 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;example.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.4.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:false,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script>
-<meta name="description" content="typename与class在template的声明式中 template&lt; class T&gt;&#x2F;&#x2F;声明方法1template&lt; typename T&gt;声明方法2，使用typename 可以暗示参数不一定是一个class类型使用方法1和方法2意义完全相同。但是涉及**嵌套从属名称(nested dependent name)**时只能使用关键字typename：">
+<meta name="description" content="C++ 标准库（STL）中头文件：#include &lt;memory&gt; C++ 11中的智能指针 shared_ptr unique_ptr weak_ptr auto_ptr（被 C++11 弃用）   Class shared_ptr 实现共享式拥有（shared ownership）概念。多个智能指针指向相同对象。该对象和其相关资源会在 “最后一个 reference 被销毁” 时">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CPP嵌套从属名称与typename">
-<meta property="og:url" content="http://example.com/2021/12/19/CPP%E5%B5%8C%E5%A5%97%E4%BB%8E%E5%B1%9E%E5%90%8D%E7%A7%B0%E4%B8%8Etypename/index.html">
+<meta property="og:title" content="CPP智能指针理解">
+<meta property="og:url" content="http://example.com/2022/04/08/CPP%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/index.html">
 <meta property="og:site_name" content="摸鱼且很菜blog">
-<meta property="og:description" content="typename与class在template的声明式中 template&lt; class T&gt;&#x2F;&#x2F;声明方法1template&lt; typename T&gt;声明方法2，使用typename 可以暗示参数不一定是一个class类型使用方法1和方法2意义完全相同。但是涉及**嵌套从属名称(nested dependent name)**时只能使用关键字typename：">
+<meta property="og:description" content="C++ 标准库（STL）中头文件：#include &lt;memory&gt; C++ 11中的智能指针 shared_ptr unique_ptr weak_ptr auto_ptr（被 C++11 弃用）   Class shared_ptr 实现共享式拥有（shared ownership）概念。多个智能指针指向相同对象。该对象和其相关资源会在 “最后一个 reference 被销毁” 时">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-12-19T07:05:20.000Z">
-<meta property="article:modified_time" content="2022-01-09T01:40:48.463Z">
+<meta property="article:published_time" content="2022-04-08T08:18:59.000Z">
+<meta property="article:modified_time" content="2022-04-08T08:20:18.781Z">
 <meta property="article:author" content="cyg">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2021/12/19/CPP%E5%B5%8C%E5%A5%97%E4%BB%8E%E5%B1%9E%E5%90%8D%E7%A7%B0%E4%B8%8Etypename/">
+<link rel="canonical" href="http://example.com/2022/04/08/CPP%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2021&#x2F;12&#x2F;19&#x2F;CPP%E5%B5%8C%E5%A5%97%E4%BB%8E%E5%B1%9E%E5%90%8D%E7%A7%B0%E4%B8%8Etypename&#x2F;&quot;,&quot;path&quot;:&quot;2021&#x2F;12&#x2F;19&#x2F;CPP嵌套从属名称与typename&#x2F;&quot;,&quot;title&quot;:&quot;CPP嵌套从属名称与typename&quot;}</script>
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;http:&#x2F;&#x2F;example.com&#x2F;2022&#x2F;04&#x2F;08&#x2F;CPP%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3&#x2F;&quot;,&quot;path&quot;:&quot;2022&#x2F;04&#x2F;08&#x2F;CPP智能指针理解&#x2F;&quot;,&quot;title&quot;:&quot;CPP智能指针理解&quot;}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
-<title>CPP嵌套从属名称与typename | 摸鱼且很菜blog</title><script src="/js/config.js"></script>
+<title>CPP智能指针理解 | 摸鱼且很菜blog</title><script src="/js/config.js"></script>
   
 
   <script src="/js/third-party/analytics/baidu-analytics.js"></script>
@@ -121,7 +121,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#typename%E4%B8%8Eclass"><span class="nav-number">1.</span> <span class="nav-text">typename与class</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E6%A0%87%E5%87%86%E5%BA%93%EF%BC%88STL%EF%BC%89%E4%B8%AD"><span class="nav-number">1.</span> <span class="nav-text">C++ 标准库（STL）中</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#C-11%E4%B8%AD%E7%9A%84%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="nav-number">1.0.1.</span> <span class="nav-text">C++ 11中的智能指针</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shared-ptr"><span class="nav-number">1.1.</span> <span class="nav-text">shared_ptr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#weak-ptr"><span class="nav-number">1.2.</span> <span class="nav-text">weak_ptr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unique-ptr"><span class="nav-number">1.3.</span> <span class="nav-text">unique_ptr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#auto-ptr"><span class="nav-number">1.4.</span> <span class="nav-text">auto_ptr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#auto-ptr-%E4%B8%8E-unique-ptr-%E6%AF%94%E8%BE%83"><span class="nav-number">1.5.</span> <span class="nav-text">auto_ptr 与 unique_ptr 比较</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -186,7 +186,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/19/CPP%E5%B5%8C%E5%A5%97%E4%BB%8E%E5%B1%9E%E5%90%8D%E7%A7%B0%E4%B8%8Etypename/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/08/CPP%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/favorite.jpg">
@@ -199,7 +199,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          CPP嵌套从属名称与typename
+          CPP智能指针理解
         </h1>
 
         <div class="post-meta-container">
@@ -209,16 +209,10 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-12-19 15:05:20" itemprop="dateCreated datePublished" datetime="2021-12-19T15:05:20+08:00">2021-12-19</time>
+      <time title="创建时间：2022-04-08 16:18:59 / 修改时间：16:20:18" itemprop="dateCreated datePublished" datetime="2022-04-08T16:18:59+08:00">2022-04-08</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2022-01-09 09:40:48" itemprop="dateModified" datetime="2022-01-09T09:40:48+08:00">2022-01-09</time>
-      </span>
 
   
     <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
@@ -237,23 +231,37 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="typename与class"><a href="#typename与class" class="headerlink" title="typename与class"></a>typename与class</h1><p>在template的声明式中</p>
-<p>template&lt; class T&gt;//声明方法1<br>template&lt; typename T&gt;声明方法2，使用typename 可以暗示参数不一定是一个class类型<br>使用方法1和方法2意义完全相同。但是涉及**嵌套从属名称(nested dependent name)**时只能使用关键字typename：</p>
-<span id="more"></span>
+        <h2 id="C-标准库（STL）中"><a href="#C-标准库（STL）中" class="headerlink" title="C++ 标准库（STL）中"></a>C++ 标准库（STL）中</h2><p>头文件：<code>#include &lt;memory&gt;</code></p>
+<h4 id="C-11中的智能指针"><a href="#C-11中的智能指针" class="headerlink" title="C++ 11中的智能指针"></a>C++ 11中的智能指针</h4><ol>
+<li>shared_ptr</li>
+<li>unique_ptr</li>
+<li>weak_ptr</li>
+<li>auto_ptr（被 C++11 弃用）</li>
+</ol>
+<ul>
+<li>Class shared_ptr 实现共享式拥有（shared ownership）概念。<strong>多个智能指针指向相同对象</strong>。该对象和其相关资源会在 “最后一个 reference 被销毁” 时被释放。为了在结构较复杂的情景中执行上述工作，标准库提供 weak_ptr、bad_weak_ptr 和 enable_shared_from_this 等辅助类。</li>
+<li>Class unique_ptr 实现独占式拥有（exclusive ownership）或严格拥有（strict ownership）概念，<strong>保证同一时间内只有一个智能指针可以指向该对象</strong>。你可以移交拥有权。它对于避免内存泄漏（resource leak）——如 new 后忘记 delete ——特别有用。</li>
+</ul>
+<h3 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h3><p>多个智能指针可以共享同一个对象，对象的最末一个拥有着有责任销毁对象，并清理与该对象相关的所有资源。</p>
+<ul>
+<li>支持定制型删除器（custom deleter），可防范 Cross-DLL 问题（对象在动态链接库（DLL）中被 new 创建，却在另一个 DLL 内被 delete 销毁）、自动解除互斥锁</li>
+</ul>
+<h3 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h3><p>weak_ptr 允许你共享但不拥有某对象，一旦最末一个拥有该对象的智能指针失去了所有权，任何 weak_ptr 都会自动成空（empty）。</p>
+<p>因此，在 default 和 copy 构造函数之外，weak_ptr 只提供 “接受一个 shared_ptr” 的构造函数。</p>
+<ul>
+<li>可打破环状引用（cycles of references，两个其实已经没有被使用的对象彼此互指，使之看似还在 “被使用” 的状态）的问题</li>
+</ul>
+<h3 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h3><p>unique_ptr 是 C++11 才开始提供的类型，是一种在异常时可以帮助避免资源泄漏的智能指针。采用独占式拥有，意味着可以确保<strong>一个对象和其相应的资源同一时间只被一个 pointer 拥有</strong>。</p>
+<p>一旦拥有着被销毁或编程 empty，或开始拥有另一个对象，先前拥有的那个对象就会被销毁，其任何相应资源亦会被释放。</p>
+<ul>
+<li>unique_ptr 用于取代 auto_ptr</li>
+</ul>
+<h3 id="auto-ptr"><a href="#auto-ptr" class="headerlink" title="auto_ptr"></a>auto_ptr</h3><p>被 c++11 弃用，原因是缺乏语言特性如 “针对构造和赋值” 的 <code>std::move</code> 语义，以及其他瑕疵。</p>
+<h3 id="auto-ptr-与-unique-ptr-比较"><a href="#auto-ptr-与-unique-ptr-比较" class="headerlink" title="auto_ptr 与 unique_ptr 比较"></a>auto_ptr 与 unique_ptr 比较</h3><ul>
+<li>auto_ptr 可以赋值拷贝，复制拷贝后所有权转移；unqiue_ptr 无拷贝赋值语义，但实现了<code>move</code> 语义；</li>
+<li>auto_ptr 对象不能管理数组（析构调用 <code>delete</code>），unique_ptr 可以管理数组（析构调用 <code>delete[]</code> ）；</li>
+</ul>
 
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> C&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print1st</span><span class="params">(<span class="keyword">const</span> C&amp; container)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(container.<span class="built_in">size</span>()&gt;<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">C::const_iterator <span class="title">iter</span><span class="params">(container.begin())</span></span>;<span class="comment">//局部变量iter是从属名称</span></span><br><span class="line">        <span class="keyword">int</span> value = * iter;<span class="comment">//局部变量value是非从属名称</span></span><br><span class="line">        std::cout&lt;&lt;value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>从属名称（dependent name）：template内出现的名称（示例中的iter）如果相依于某个template参数（示例中的C）的名称。如果从属名称在class内呈嵌套状，则称为<strong>嵌套从属名称</strong>（nested dependent name）。const_iterator也是类。</p>
-<p>非从属名称（non-dependent name）：不依赖于任何template参数的名称。</p>
-<p><strong>困惑：嵌套从属名称可能导致解析困难：</strong></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> C&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print1st</span><span class="params">(<span class="keyword">const</span> C&amp; container)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        C::const_iterator* x;<span class="comment">//如果const_iterator是类，则x是一个指向const_iterator的指针，但如果const_iterator是一个变量的名称，则是一个相乘动作。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>C++中一个相关的解析规则：<strong>如果解析器在template中遭遇一个嵌套从属名称，便假设这名称不是一个类型，除非你通过放置关键字typename告诉它是</strong></p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> C&gt; </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print1st</span><span class="params">(<span class="keyword">const</span> C&amp; container)</span> </span></span><br><span class="line"><span class="function"></span>&#123;        </span><br><span class="line"><span class="keyword">typename</span> C::const_iterator* x;*<span class="comment">//通过放置关键字typename说明const_iterator是类型* </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>也就是说：任何时候当你想要在template中指涉一个嵌套从属类型名称，就必须在紧邻它的前一个位置放置typename关键字作为前缀词。这个规则的例外：</p>
-<p>不可以出现在base classes list内的嵌套从属名称之前<br>不可以出现在member initialization list（成员初值列）中作为base class修饰符</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">derived</span>:</span><span class="keyword">public</span> base&lt;T&gt;::nested&#123;<span class="comment">//此处不可以</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">explivit <span class="title">derived</span><span class="params">(<span class="keyword">int</span> x)</span>:base&lt;T&gt;::nested(x)&#123;</span><span class="comment">//此处不可以</span></span><br><span class="line">        <span class="keyword">typename</span> base&lt;T&gt;::nested temp;<span class="comment">//此处可以</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -269,14 +277,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/12/19/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/" rel="prev" title="CPP多态笔记">
-                  <i class="fa fa-chevron-left"></i> CPP多态笔记
+                <a href="/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/" rel="prev" title="CPP模板学习">
+                  <i class="fa fa-chevron-left"></i> CPP模板学习
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/" rel="next" title="CPP模板学习">
-                  CPP模板学习 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -347,7 +352,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{&quot;enable&quot;:true,&quot;github_id&quot;:&quot;gyyc233&quot;,&quot;repo&quot;:&quot;gyyc233.github.io&quot;,&quot;client_id&quot;:&quot;0c04f54434c3a39e65b6&quot;,&quot;client_secret&quot;:&quot;796c7805b9ca6b81ac0a0b134a0f31cc0de73139&quot;,&quot;admin_user&quot;:&quot;gyyc233&quot;,&quot;distraction_free_mode&quot;:true,&quot;proxy&quot;:&quot;https:&#x2F;&#x2F;cors-anywhere.azm.workers.dev&#x2F;https:&#x2F;&#x2F;github.com&#x2F;login&#x2F;oauth&#x2F;access_token&quot;,&quot;language&quot;:null,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;gitalk@1.7.2&#x2F;dist&#x2F;gitalk.min.js&quot;,&quot;integrity&quot;:&quot;sha256-Pmj85ojLaPOWwRtlMJwmezB&#x2F;Qg8BzvJp5eTzvXaYAfA&#x3D;&quot;},&quot;path_md5&quot;:&quot;8daa6aa03cb72306d14523bb92a230a8&quot;}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{&quot;enable&quot;:true,&quot;github_id&quot;:&quot;gyyc233&quot;,&quot;repo&quot;:&quot;gyyc233.github.io&quot;,&quot;client_id&quot;:&quot;0c04f54434c3a39e65b6&quot;,&quot;client_secret&quot;:&quot;796c7805b9ca6b81ac0a0b134a0f31cc0de73139&quot;,&quot;admin_user&quot;:&quot;gyyc233&quot;,&quot;distraction_free_mode&quot;:true,&quot;proxy&quot;:&quot;https:&#x2F;&#x2F;cors-anywhere.azm.workers.dev&#x2F;https:&#x2F;&#x2F;github.com&#x2F;login&#x2F;oauth&#x2F;access_token&quot;,&quot;language&quot;:null,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;gitalk@1.7.2&#x2F;dist&#x2F;gitalk.min.js&quot;,&quot;integrity&quot;:&quot;sha256-Pmj85ojLaPOWwRtlMJwmezB&#x2F;Qg8BzvJp5eTzvXaYAfA&#x3D;&quot;},&quot;path_md5&quot;:&quot;56856ce31ee69957c5e0c16441816cf2&quot;}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"kesyoban"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":false},"rect":"opacity:0.7","log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
