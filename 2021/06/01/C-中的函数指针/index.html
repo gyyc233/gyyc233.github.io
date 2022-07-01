@@ -16,7 +16,7 @@
       <title>C++中的函数指针 |  摸鱼且很菜blog</title>
   <meta name="generator" content="hexo-theme-ayer">
       
-      <link rel="shortcut icon" href="/favicon.ico" />
+      <link rel="shortcut icon" href="/favicon_web.ico" />
        
 <link rel="stylesheet" href="/dist/main.css">
 
@@ -51,6 +51,17 @@
 <body>
   <div id="app">
     
+      <canvas class="fireworks"></canvas>
+      <style>
+        .fireworks {
+          position: fixed;
+          left: 0;
+          top: 0;
+          z-index: 99999;
+          pointer-events: none;
+        }
+      </style>
+      
       
     <main class="content on">
       <section class="outer">
@@ -147,12 +158,6 @@
 
 <h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CPPStudyByCmake.cpp: 定义应用程序的入口点。</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printf1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Hello World&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">printf2</span><span class="params">(<span class="keyword">int</span> value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Hello World.Value:&quot;</span> &lt;&lt;(value+<span class="number">100</span>)&lt;&lt; std::endl;</span><br><span class="line">	<span class="keyword">return</span> (value + <span class="number">100</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//=====================================================================</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">funcTest</span><span class="params">(<span class="keyword">int</span> value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Value : &quot;</span> &lt;&lt; value &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">forEach</span><span class="params">(<span class="keyword">const</span> std::vector&lt;<span class="keyword">int</span>&gt; vector,<span class="keyword">void</span>(*func)(<span class="keyword">int</span>))</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> value : vector)</span><br><span class="line">		<span class="built_in">func</span>(value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//函数指针</span></span><br><span class="line">	<span class="comment">//介绍</span></span><br><span class="line">	<span class="built_in">printf1</span>();</span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="built_in"><span class="keyword">void</span></span>(*funcPtr1)();	<span class="comment">//定义一个函数指针</span></span><br><span class="line">	funcPtr1 = printf1;</span><br><span class="line">	<span class="built_in">funcPtr1</span>();</span><br><span class="line">	<span class="keyword">auto</span> a = printf1;<span class="comment">//a的类型void(*a)()   void(*)() </span></span><br><span class="line">	<span class="keyword">auto</span> b = &amp;printf1;<span class="comment">//b void(*)()  &amp;printf1 类型void(*)() </span></span><br><span class="line">	<span class="comment">//a();//a()等价于printf1()</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//使用typedef</span></span><br><span class="line">	<span class="function"><span class="keyword">typedef</span> <span class="title">int</span><span class="params">(*test)</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line">	test t1 = printf2;	<span class="comment">//printf2的指针类型是 int(*test)(int)</span></span><br><span class="line">	<span class="built_in">t1</span>(<span class="number">9</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//用法2、使用函数指针作为传入参数</span></span><br><span class="line">	std::vector&lt;<span class="keyword">int</span>&gt; vectirs = &#123; <span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">1</span>,<span class="number">2</span> &#125;;</span><br><span class="line">	forEach(vectirs,funcTest);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//用法3、lambda表达式</span></span><br><span class="line">	forEach(vectirs, [](<span class="keyword">int</span> value) &#123;</span><br><span class="line">		std::cout &lt;&lt; <span class="string">&quot;lambda Value :&quot;</span> &lt;&lt; value &lt;&lt; std::endl;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	std::cin.<span class="built_in">get</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 
       <!-- reward -->
-      
-      <div id="reword-out">
-        <div id="reward-btn">
-          打赏
-        </div>
-      </div>
       
     </div>
     
@@ -264,7 +269,7 @@
     <ul>
       <li>
         Copyrights &copy;
-        2015-2022
+        2020-2022
         <i class="ri-heart-fill heart_icon"></i> cyg
       </li>
     </ul>
@@ -317,7 +322,7 @@
 <nav class="navbar">
   
   <div class="logo">
-    <a href="/"><img src="/images/ayer-side.svg" alt="摸鱼且很菜blog"></a>
+    <a href="/"><img src="/images/hakelong.ico" alt="摸鱼且很菜blog"></a>
   </div>
   
   <ul class="nav nav-main">
@@ -336,22 +341,6 @@
     
     <li class="nav-item">
       <a class="nav-item-link" href="/tags">标签</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/tags/%E6%97%85%E8%A1%8C/">旅行</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" target="_blank" rel="noopener" href="http://shenyu-vip.lofter.com">摄影</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/friends">友链</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/2019/about">关于我</a>
     </li>
     
   </ul>
@@ -384,19 +373,9 @@
 <!-- #reward -->
 <div id="reward">
   <span class="close"><i class="ri-close-line"></i></span>
-  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <p class="reward-p"><i class="ri-cup-line"></i></p>
   <div class="reward-box">
     
-    <div class="reward-item">
-      <img class="reward-img" src="/images/alipay.jpg">
-      <span class="reward-type">支付宝</span>
-    </div>
-    
-    
-    <div class="reward-item">
-      <img class="reward-img" src="/images/wechat.jpg">
-      <span class="reward-type">微信</span>
-    </div>
     
   </div>
 </div>
@@ -551,6 +530,10 @@
 
 <!-- ClickBoom1 -->
 
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+
+<script src="/js/clickBoom1.js"></script>
+ 
 <!-- ClickBoom2 -->
 
 <!-- CodeCopy -->
@@ -612,7 +595,9 @@
 </script>
  
 <!-- CanvasBackground -->
-
+ 
+<script src="/js/dz.js"></script>
+ 
 <script>
   if (window.mermaid) {
     mermaid.initialize({ theme: "forest" });

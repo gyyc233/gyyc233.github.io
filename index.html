@@ -16,7 +16,7 @@
       <title> 摸鱼且很菜blog</title>
   <meta name="generator" content="hexo-theme-ayer">
       
-      <link rel="shortcut icon" href="/favicon.ico" />
+      <link rel="shortcut icon" href="/favicon_web.ico" />
        
 <link rel="stylesheet" href="/dist/main.css">
 
@@ -51,19 +51,30 @@
 <body>
   <div id="app">
     
+      <canvas class="fireworks"></canvas>
+      <style>
+        .fireworks {
+          position: fixed;
+          left: 0;
+          top: 0;
+          z-index: 99999;
+          pointer-events: none;
+        }
+      </style>
+      
       
     <main class="content on">
       
 <section class="cover">
     
       
-      <a class="forkMe" href="https://github.com/Shen-Yu/hexo-theme-ayer"
+      <a class="forkMe" href="https://github.com/gyyc233/gyyc233.github.io"
         target="_blank"><img width="149" height="149" src="/images/forkme.png"
           class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
     
   <div class="cover-frame">
     <div class="bg-box">
-      <img src="/images/cover1.jpg" alt="image frame" />
+      <img src="/images/miku4_update.jpg" alt="image frame" />
     </div>
     <div class="cover-inner text-center text-white">
       <h1><a href="/">摸鱼且很菜blog</a></h1>
@@ -92,7 +103,7 @@
   <script>
     try {
       var typed = new Typed("#subtitle", {
-        strings: ['面朝大海，春暖花开', '愿你一生努力，一生被爱', '想要的都拥有，得不到的都释怀'],
+        strings: ['Over top clear mind', '愿你一生努力，一生被爱', '想要的都拥有，得不到的都释怀'],
         startDelay: 0,
         typeSpeed: 200,
         loop: true,
@@ -106,22 +117,6 @@
   
 <div id="main">
   <section class="outer">
-  
-  <ul class="ads">
-    
-        <li>
-            <a target="_blank" rel="noopener" href="https://curl.qcloud.com/kvO7hb43">
-                <img src="https://pic.imgdb.cn/item/62174b452ab3f51d912a5ccc.jpg" width="300" alt="云服务器限时秒杀">
-            </a>
-        </li>
-    
-        <li>
-            <a target="_blank" rel="noopener" href="https://www.vultr.com/?ref=8630075">
-                <img src="https://pic.imgdb.cn/item/62174b452ab3f51d912a5cd7.png" width="300" alt="vultr优惠vps">
-            </a>
-        </li>
-    
-</ul>
   
   
   
@@ -196,24 +191,7 @@
   <time datetime="2022-04-08T08:18:59.000Z" itemprop="datePublished">2022-04-08</time>
 </a>    
     </div>
-      
-    <div class="article-entry" itemprop="articleBody">
        
-  <h2 id="C-标准库（STL）中"><a href="#C-标准库（STL）中" class="headerlink" title="C++ 标准库（STL）中"></a>C++ 标准库（STL）中</h2><p>头文件：<code>#include &lt;memory&gt;</code></p>
-<h4 id="C-11中的智能指针"><a href="#C-11中的智能指针" class="headerlink" title="C++ 11中的智能指针"></a>C++ 11中的智能指针</h4><ol>
-<li>shared_ptr</li>
-<li>unique_ptr</li>
-<li>weak_ptr</li>
-<li>auto_ptr（被 C++11 弃用）</li>
-</ol> 
-      <a class="article-more-link" href="/2022/04/08/CPP%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
 
     <!-- copyright -->
     
@@ -254,29 +232,7 @@
   <time datetime="2022-01-13T15:26:54.000Z" itemprop="datePublished">2022-01-13</time>
 </a>    
     </div>
-      
-    <div class="article-entry" itemprop="articleBody">
        
-  <ol>
-<li><p>模板是 C++ 支持参数化多态的工具，使用模板可以使用户为类或者函数声明一种一般模式。</p>
-</li>
-<li><p>C++ 的标准库提供许多有用的函数大多结合了模板的观念，如 STL 以及 IO Stream。</p>
-</li>
-</ol>
-<p>模板是一种对类型进行参数化的工具；通常有两种形式：函数模板和类模板:</p>
-<ul>
-<li>函数模板 针对仅参数类型不同的函数；</li>
-<li>类模板 针对仅数据成员和成员函数类型不同的类.</li>
-</ul>
-<p>使用模板的目的就是能够让程序员编写与类型无关的代码.</p> 
-      <a class="article-more-link" href="/2022/01/13/CPP%E6%A8%A1%E6%9D%BF%E5%AD%A6%E4%B9%A0/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
 
     <!-- copyright -->
     
@@ -317,19 +273,7 @@
   <time datetime="2021-12-19T07:05:20.000Z" itemprop="datePublished">2021-12-19</time>
 </a>    
     </div>
-      
-    <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="typename与class"><a href="#typename与class" class="headerlink" title="typename与class"></a>typename与class</h1><p>在template的声明式中</p>
-<p>template&lt; class T&gt;//声明方法1<br>template&lt; typename T&gt;声明方法2，使用typename 可以暗示参数不一定是一个class类型<br>使用方法1和方法2意义完全相同。但是涉及**嵌套从属名称(nested dependent name)**时只能使用关键字typename：</p> 
-      <a class="article-more-link" href="/2021/12/19/CPP%E5%B5%8C%E5%A5%97%E4%BB%8E%E5%B1%9E%E5%90%8D%E7%A7%B0%E4%B8%8Etypename/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
 
     <!-- copyright -->
     
@@ -370,18 +314,7 @@
   <time datetime="2021-12-19T06:33:03.000Z" itemprop="datePublished">2021-12-19</time>
 </a>    
     </div>
-      
-    <div class="article-entry" itemprop="articleBody">
        
-  <p>多态是C++ 面向对象设计的特征之一。包括运行时多态和编译时多态，在实际工程开发中低耦合，插件化经常涉及。</p> 
-      <a class="article-more-link" href="/2021/12/19/CPP%E5%A4%9A%E6%80%81%E7%AC%94%E8%AE%B0/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
 
     <!-- copyright -->
     
@@ -422,34 +355,7 @@
   <time datetime="2021-08-21T04:06:04.000Z" itemprop="datePublished">2021-08-21</time>
 </a>    
     </div>
-      
-    <div class="article-entry" itemprop="articleBody">
        
-  <p>数据分析中为了方便下一步对数据进行处理，会经常用到归一化<code>Normalization</code>  标准化<code>Standardization</code> 正则化<code>Regularization</code>。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>归一化<code>Normalization</code></p>
-<blockquote>
-<p> 把数据变为（0，1）之间的小数，比如min-max归一化；</p>
-<p>主要是为了方便数据处理，因为将数据映射到0～1范围之内，可以使处理过程更加便捷、快速；</p>
-</blockquote>
-<p>标准化<code>Standardization</code>/<code>Normalization</code></p>
-<blockquote>
-<p>数据的标准化是将数据按比例缩放，使之落入一个小的特定区间。z-score标准化，即零-均值标准化（常用方法），y=(x-μ)/σ；</p>
-</blockquote>
-<blockquote>
-<p>归一化和标准化的英文翻译是一致的，但是根据其用途（或公式）的不同去理解（或翻译）</p>
-</blockquote>
-<p>正则化<code>Regularization</code></p>
-<blockquote>
-<p>用一组与原不适定问题相“邻近”的适定问题的解，去逼近原问题的解，这种方法称为正则化方法；</p>
-</blockquote> 
-      <a class="article-more-link" href="/2021/08/21/%E5%BD%92%E4%B8%80%E5%8C%96%E3%80%81%E6%A0%87%E5%87%86%E5%8C%96%E3%80%81%E6%AD%A3%E5%88%99%E5%8C%96/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
 
     <!-- copyright -->
     
@@ -490,18 +396,7 @@
   <time datetime="2021-08-17T14:22:58.000Z" itemprop="datePublished">2021-08-17</time>
 </a>    
     </div>
-      
-    <div class="article-entry" itemprop="articleBody">
        
-  <p>记录一下hexo的一些常用操作，免得经常查~</p> 
-      <a class="article-more-link" href="/2021/08/17/hexo%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
 
     <!-- copyright -->
     
@@ -540,43 +435,7 @@
   <time datetime="2021-07-31T13:53:04.000Z" itemprop="datePublished">2021-07-31</time>
 </a>    
     </div>
-      
-    <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="旋转矩阵-Rotation-Matrix"><a href="#旋转矩阵-Rotation-Matrix" class="headerlink" title="旋转矩阵 Rotation Matrix"></a>旋转矩阵 Rotation Matrix</h1><h2 id="关于Rotation-Matrix"><a href="#关于Rotation-Matrix" class="headerlink" title="关于Rotation Matrix"></a>关于Rotation Matrix</h2><ul>
-<li><strong>三个用法：</strong></li>
-</ul>
-<ol>
-<li>描述一个frame相对于另一个frame的姿态</li>
-<li>将point由某一个frame的表达转换到另一个frame（仅有相对转动变化）来表达</li>
-<li>将point(vector)在同一个frame中进行转动</li>
-</ol>
-<ul>
-<li><p><strong>思考</strong>——空间中的Rotation是3DOFs，那要如何把一般rotation matrix所表达的姿态，<strong>拆解成3次旋转角度</strong>，以应对到3个DOFs？</p>
-</li>
-<li><p>注意事项：</p>
-</li>
-<li><ul>
-<li>Rotation<strong>前后顺序</strong>需要明确定义（与移动不同，先向X移动后向Y移动与先向Y移动后向X移动可以互换顺序，而旋转不可以）</li>
-<li><strong>旋转转轴</strong>也需要明确定义。一般有两种：【固定不动】旋转轴和【Body frame(随动)】转轴。</li>
-</ul>
-</li>
-<li><p>两个拆解方式：</p>
-</li>
-<li><ul>
-<li>对方向<strong>【固定不动】</strong>的旋转轴旋转：<strong>Fixed angles</strong>…</li>
-<li>对<strong>【转动的frame当下所在】</strong>的旋转方向旋转：<strong>Euler angles</strong> …</li>
-</ul>
-</li>
-</ul> 
-      <a class="article-more-link" href="/2021/07/31/%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5%E5%AD%A6%E4%B9%A0/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
 
     <!-- copyright -->
     
@@ -617,18 +476,7 @@
   <time datetime="2021-06-27T05:04:51.000Z" itemprop="datePublished">2021-06-27</time>
 </a>    
     </div>
-      
-    <div class="article-entry" itemprop="articleBody">
        
-  <p>PPF 点对特征 算法笔记</p> 
-      <a class="article-more-link" href="/2021/06/27/PPF%E7%AE%97%E6%B3%95%E8%AE%B2%E8%A7%A3/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
 
     <!-- copyright -->
     
@@ -669,25 +517,7 @@
   <time datetime="2021-06-12T04:06:25.000Z" itemprop="datePublished">2021-06-12</time>
 </a>    
     </div>
-      
-    <div class="article-entry" itemprop="articleBody">
        
-  <p>背包问题是一类经典的动态规划问题</p>
-<p>问题可以描述为：给定一组物品，每种物品都有自己的重量和价格，在限定的总重量内，我们如何选择，才能使得物品的总价格最高。NPC问题是没有多项式时间复杂度的解法的，但是利用动态规划，我们可以以伪多项式时间复杂度求解背包问题。</p>
-<p>一般来讲，背包问题分为以下几类：</p>
-<ul>
-<li>01背包问题；</li>
-<li>完全背包问题；</li>
-<li>多重背包问题；</li>
-</ul> 
-      <a class="article-more-link" href="/2021/06/12/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
 
     <!-- copyright -->
     
@@ -728,20 +558,7 @@
   <time datetime="2021-06-03T14:49:01.000Z" itemprop="datePublished">2021-06-03</time>
 </a>    
     </div>
-      
-    <div class="article-entry" itemprop="articleBody">
        
-  <p>Principal Component Analysis</p>
-<p>PCA 一种非监督学习，常被用于数据降维、有损数据压缩、特征抽取、数据可视化。它也被称为Karhunen-Loève变换。</p>
-<p>PCA的思想是将n维特征映射到k维空间上。k&lt;n，这k维特征是全新的正交特征，是重新构造出来的k维特征，而不是简单地从n维特征中去除其余n−k维特征。</p> 
-      <a class="article-more-link" href="/2021/06/03/python-%E5%AE%9E%E7%8E%B0PCA/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
 
     <!-- copyright -->
     
@@ -774,7 +591,7 @@
     <ul>
       <li>
         Copyrights &copy;
-        2015-2022
+        2020-2022
         <i class="ri-heart-fill heart_icon"></i> cyg
       </li>
     </ul>
@@ -827,7 +644,7 @@
 <nav class="navbar">
   
   <div class="logo">
-    <a href="/"><img src="/images/ayer-side.svg" alt="摸鱼且很菜blog"></a>
+    <a href="/"><img src="/images/hakelong.ico" alt="摸鱼且很菜blog"></a>
   </div>
   
   <ul class="nav nav-main">
@@ -846,22 +663,6 @@
     
     <li class="nav-item">
       <a class="nav-item-link" href="/tags">标签</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/tags/%E6%97%85%E8%A1%8C/">旅行</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" target="_blank" rel="noopener" href="http://shenyu-vip.lofter.com">摄影</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/friends">友链</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/2019/about">关于我</a>
     </li>
     
   </ul>
@@ -894,19 +695,9 @@
 <!-- #reward -->
 <div id="reward">
   <span class="close"><i class="ri-close-line"></i></span>
-  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <p class="reward-p"><i class="ri-cup-line"></i></p>
   <div class="reward-box">
     
-    <div class="reward-item">
-      <img class="reward-img" src="/images/alipay.jpg">
-      <span class="reward-type">支付宝</span>
-    </div>
-    
-    
-    <div class="reward-item">
-      <img class="reward-img" src="/images/wechat.jpg">
-      <span class="reward-type">微信</span>
-    </div>
     
   </div>
 </div>
@@ -1045,6 +836,10 @@
 
 <!-- ClickBoom1 -->
 
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+
+<script src="/js/clickBoom1.js"></script>
+ 
 <!-- ClickBoom2 -->
 
 <!-- CodeCopy -->
@@ -1106,7 +901,9 @@
 </script>
  
 <!-- CanvasBackground -->
-
+ 
+<script src="/js/dz.js"></script>
+ 
 <script>
   if (window.mermaid) {
     mermaid.initialize({ theme: "forest" });

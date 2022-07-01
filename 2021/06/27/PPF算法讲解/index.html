@@ -16,7 +16,7 @@
       <title>PPF算法讲解 |  摸鱼且很菜blog</title>
   <meta name="generator" content="hexo-theme-ayer">
       
-      <link rel="shortcut icon" href="/favicon.ico" />
+      <link rel="shortcut icon" href="/favicon_web.ico" />
        
 <link rel="stylesheet" href="/dist/main.css">
 
@@ -51,6 +51,17 @@
 <body>
   <div id="app">
     
+      <canvas class="fireworks"></canvas>
+      <style>
+        .fireworks {
+          position: fixed;
+          left: 0;
+          top: 0;
+          z-index: 99999;
+          pointer-events: none;
+        }
+      </style>
+      
       
     <main class="content on">
       <section class="outer">
@@ -200,12 +211,6 @@
 <h2 id="Opencv-源码翻译"><a href="#Opencv-源码翻译" class="headerlink" title="Opencv 源码翻译"></a>Opencv 源码翻译</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __OPENCV_SURFACE_MATCHING_PPF_MATCH_3D_HPP__</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __OPENCV_SURFACE_MATCHING_PPF_MATCH_3D_HPP__</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;pose_3d.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;t_hash_int.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> cv</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">namespace</span> ppf_match_3d</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//! @addtogroup surface_matching</span></span><br><span class="line"><span class="comment">//! @&#123;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief Struct, holding a node in the hashtable</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">THash</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="keyword">int</span> id;</span><br><span class="line">  <span class="keyword">int</span> i, ppfInd;</span><br><span class="line">&#125; THash;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief Class, allowing the load and matching 3D models.</span></span><br><span class="line"><span class="comment">  * Typical Use:</span></span><br><span class="line"><span class="comment">  * @code</span></span><br><span class="line"><span class="comment">  * // Train a model</span></span><br><span class="line"><span class="comment">  * ppf_match_3d::PPF3DDetector detector(0.05, 0.05);</span></span><br><span class="line"><span class="comment">  * detector.trainModel(pc);</span></span><br><span class="line"><span class="comment">  * // Search the model in a given scene</span></span><br><span class="line"><span class="comment">  * vector&lt;Pose3DPtr&gt; results;</span></span><br><span class="line"><span class="comment">  * detector.match(pcTest, results, 1.0/5.0,0.05);</span></span><br><span class="line"><span class="comment">  * @endcode</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CV_EXPORTS_W</span> <span class="title">PPF3DDetector</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * \brief Empty constructor. Sets default arguments</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function">CV_WRAP <span class="title">PPF3DDetector</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Constructor with arguments 带参数的构造函数</span></span><br><span class="line"><span class="comment">    * @param [in] relativeSamplingStep Sampling distance relative to the object&#x27;s diameter. Models are first sampled uniformly in order to improve efficiency. Decreasing this value leads to a denser model, and a more accurate pose estimation but the larger the model, the slower the training. Increasing the value leads to a less accurate pose computation but a smaller model and faster model generation and matching. Beware of the memory consumption when using small values.</span></span><br><span class="line"><span class="comment">    * 模型采样步长。为了提高效率，首先对模型进行均匀采样。减小此值将导致模型更密集，并且姿势估计更精确，但模型越大，训练越慢。增加该值会导致姿势计算的精度降低，但模型更小，模型生成和匹配更快。使用小值时要小心内存消耗。</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    * @param [in] relativeDistanceStep The discretization distance of the point pair distance relative to the model&#x27;s diameter. This value has a direct impact on the hashtable. Using small values would lead to too fine discretization, and thus ambiguity in the bins of hashtable. Too large values would lead to no discrimination over the feature vectors and different point pair features would be assigned to the same bin. This argument defaults to the value of RelativeSamplingStep. For noisy scenes, the value can be increased to improve the robustness of the matching against noisy points.</span></span><br><span class="line"><span class="comment">    * 模型采样步长 ppf点对间距与模型最大直径的比值？对哈希表生成有直接影响。过小会导致国度离散化，导致hash表中bin的模糊，过大会无法区分特征向量，不同的点对特征将会分配到一个bin中。此参数默认与RelativeSamplingStep相同，对于有噪声的场景，可以通过增加该值来提高匹配对噪声点的鲁棒性。</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    * @param [in] numAngles Set the discretization of the point pair orientation as the number of subdivisions of the angle. This value is the equivalent of RelativeDistanceStep for the orientations. Increasing the value increases the precision of the matching but decreases the robustness against incorrect normal directions. Decreasing the value decreases the precision of the matching but increases the robustness against incorrect normal directions. For very noisy scenes where the normal directions can not be computed accurately, the value can be set to 25 or 20.</span></span><br><span class="line"><span class="comment">    * 角度分支，用于设置ppf方向，设置模型采样步长relativeDistanceStep的方向。提高该值，会增加匹配精度，同时降低针对不正确正常方向的稳健性。降低值会降低匹配的精度，但会提高针对不正确正常方向的鲁棒性。对于无法准确计算正常方向的非常嘈杂的场景，值可以设置为 25 或 20</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="function">CV_WRAP <span class="title">PPF3DDetector</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> relativeSamplingStep, <span class="keyword">const</span> <span class="keyword">double</span> relativeDistanceStep=<span class="number">0.05</span>, <span class="keyword">const</span> <span class="keyword">double</span> numAngles=<span class="number">30</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">PPF3DDetector</span>();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    *  Set the parameters for the search</span></span><br><span class="line"><span class="comment">    *  @param [in] positionThreshold Position threshold controlling the similarity of translations. Depends on the units of calibration/model.</span></span><br><span class="line"><span class="comment">    * 匹配的位移阈值，取决于模型的实际的单位，如mm 。控制模型与场景之间所容忍的最大位移偏差？</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    *  @param [in] rotationThreshold Position threshold controlling the similarity of rotations. This parameter can be perceived as a threshold over the difference of angles</span></span><br><span class="line"><span class="comment">    * 旋转阈值，控制模型与场景之间所容忍的最大旋转偏差？</span></span><br><span class="line"><span class="comment">    *  @param [in] useWeightedClustering The algorithm by default clusters the poses without weighting. A non-zero value would indicate that the pose clustering should take into account the number of votes as the weights and perform a weighted averaging instead of a simple one.</span></span><br><span class="line"><span class="comment">    * 在将pose进行聚类时，是否考虑以投票数作为权重，并进行加权平均，而不是简单的平均值。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">setSearchParams</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> positionThreshold=<span class="number">-1</span>, <span class="keyword">const</span> <span class="keyword">double</span> rotationThreshold=<span class="number">-1</span>, <span class="keyword">const</span> <span class="keyword">bool</span> useWeightedClustering=<span class="literal">false</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    *  \brief Trains a new model.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    *  @param [in] Model The input point cloud with normals (Nx6)</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    *  \details Uses the parameters set in the constructor to downsample and learn a new model. When the model is learnt, the instance gets ready for calling &quot;match&quot;.</span></span><br><span class="line"><span class="comment">    * 模型训练</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="function">CV_WRAP <span class="keyword">void</span> <span class="title">trainModel</span><span class="params">(<span class="keyword">const</span> Mat&amp; Model)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    *  \brief Matches a trained model across a provided scene.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    *  @param [in] scene Point cloud for the scene 输入场景点云</span></span><br><span class="line"><span class="comment">    *  @param [out] results List of output poses 位姿集合</span></span><br><span class="line"><span class="comment">    *  @param [in] relativeSceneSampleStep The ratio of scene points to be used for the matching after sampling with relativeSceneDistance. For example, if this value is set to 1.0/5.0, every 5th point from the scene is used for pose estimation. This parameter allows an easy trade-off between speed and accuracy of the matching. Increasing the value leads to less points being used and in turn to a faster but less accurate pose computation. Decreasing the value has the inverse effect.</span></span><br><span class="line"><span class="comment">    * 用于匹配的场景点比例，增加值会导致使用较少的点，进而导致更快但更不准确的姿势计算。降低值具有反作用。</span></span><br><span class="line"><span class="comment">    *  @param [in] relativeSceneDistance Set the distance threshold relative to the diameter of the model. This parameter is equivalent to relativeSamplingStep in the training stage. This parameter acts like a prior sampling with the relativeSceneSampleStep parameter.</span></span><br><span class="line"><span class="comment">    * 设置相对于模型直径的距离阈值（采样距离）。此参数相当于培训阶段的相对采样步长。增加值会导致使用较少的点，进而导致更快但更不准确的姿势计算。降低值具有反作用。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="function">CV_WRAP <span class="keyword">void</span> <span class="title">match</span><span class="params">(<span class="keyword">const</span> Mat&amp; scene, CV_OUT std::vector&lt;Pose3DPtr&gt; &amp;results, <span class="keyword">const</span> <span class="keyword">double</span> relativeSceneSampleStep=<span class="number">1.0</span>/<span class="number">5.0</span>, <span class="keyword">const</span> <span class="keyword">double</span> relativeSceneDistance=<span class="number">0.03</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">read</span><span class="params">(<span class="keyword">const</span> FileNode&amp; fn)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">write</span><span class="params">(FileStorage&amp; fs)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">  <span class="keyword">double</span> angle_step, angle_step_radians, distance_step;</span><br><span class="line">  <span class="keyword">double</span> sampling_step_relative, angle_step_relative, distance_step_relative;</span><br><span class="line">  Mat sampled_pc, ppf;</span><br><span class="line">  <span class="keyword">int</span> num_ref_points;</span><br><span class="line">  hashtable_int* hash_table;</span><br><span class="line">  THash* hash_nodes;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">double</span> position_threshold, rotation_threshold;</span><br><span class="line">  <span class="keyword">bool</span> use_weighted_avg;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> scene_sample_step;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">clearTrainingModels</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">computePPFFeatures</span><span class="params">(<span class="keyword">const</span> Vec3d&amp; p1, <span class="keyword">const</span> Vec3d&amp; n1,</span></span></span><br><span class="line"><span class="params"><span class="function">                          <span class="keyword">const</span> Vec3d&amp; p2, <span class="keyword">const</span> Vec3d&amp; n2,</span></span></span><br><span class="line"><span class="params"><span class="function">                          Vec4d&amp; f)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">bool</span> <span class="title">matchPose</span><span class="params">(<span class="keyword">const</span> Pose3D&amp; sourcePose, <span class="keyword">const</span> Pose3D&amp; targetPose)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">clusterPoses</span><span class="params">(std::vector&lt;Pose3DPtr&gt;&amp; poseList, <span class="keyword">int</span> numPoses, std::vector&lt;Pose3DPtr&gt; &amp;finalPoses)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">bool</span> trained;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//! @&#125;</span></span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">// namespace ppf_match_3d</span></span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">// namespace cv</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure> 
       <!-- reward -->
       
-      <div id="reword-out">
-        <div id="reward-btn">
-          打赏
-        </div>
-      </div>
-      
     </div>
     
 
@@ -316,7 +321,7 @@
     <ul>
       <li>
         Copyrights &copy;
-        2015-2022
+        2020-2022
         <i class="ri-heart-fill heart_icon"></i> cyg
       </li>
     </ul>
@@ -369,7 +374,7 @@
 <nav class="navbar">
   
   <div class="logo">
-    <a href="/"><img src="/images/ayer-side.svg" alt="摸鱼且很菜blog"></a>
+    <a href="/"><img src="/images/hakelong.ico" alt="摸鱼且很菜blog"></a>
   </div>
   
   <ul class="nav nav-main">
@@ -388,22 +393,6 @@
     
     <li class="nav-item">
       <a class="nav-item-link" href="/tags">标签</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/tags/%E6%97%85%E8%A1%8C/">旅行</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" target="_blank" rel="noopener" href="http://shenyu-vip.lofter.com">摄影</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/friends">友链</a>
-    </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link" href="/2019/about">关于我</a>
     </li>
     
   </ul>
@@ -436,19 +425,9 @@
 <!-- #reward -->
 <div id="reward">
   <span class="close"><i class="ri-close-line"></i></span>
-  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <p class="reward-p"><i class="ri-cup-line"></i></p>
   <div class="reward-box">
     
-    <div class="reward-item">
-      <img class="reward-img" src="/images/alipay.jpg">
-      <span class="reward-type">支付宝</span>
-    </div>
-    
-    
-    <div class="reward-item">
-      <img class="reward-img" src="/images/wechat.jpg">
-      <span class="reward-type">微信</span>
-    </div>
     
   </div>
 </div>
@@ -603,6 +582,10 @@
 
 <!-- ClickBoom1 -->
 
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+
+<script src="/js/clickBoom1.js"></script>
+ 
 <!-- ClickBoom2 -->
 
 <!-- CodeCopy -->
@@ -664,7 +647,9 @@
 </script>
  
 <!-- CanvasBackground -->
-
+ 
+<script src="/js/dz.js"></script>
+ 
 <script>
   if (window.mermaid) {
     mermaid.initialize({ theme: "forest" });
