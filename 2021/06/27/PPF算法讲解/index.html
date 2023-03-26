@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta name="description" content="Over top clear mind" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>PPF算法讲解 |  摸鱼且很菜blog</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/penhuolong.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      <canvas class="fireworks"></canvas>
+      <style>
+        .fireworks {
+          position: fixed;
+          left: 0;
+          top: 0;
+          z-index: 99999;
+          pointer-events: none;
+        }
+      </style>
+      
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-PPF算法讲解"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  PPF算法讲解
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/06/27/PPF%E7%AE%97%E6%B3%95%E8%AE%B2%E8%A7%A3/" class="article-date">
+  <time datetime="2021-06-27T05:04:51.000Z" itemprop="datePublished">2021-06-27</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.5k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">11 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>PPF 点对特征 算法笔记</p>
+<span id="more"></span>
+<h2 id="PPF相关调研"><a href="#PPF相关调研" class="headerlink" title="PPF相关调研"></a>PPF相关调研</h2><ol>
+<li>两点与法向量之间的构造点对特征</li>
+</ol>
+<p><img src="image-20210621095151130.png" alt=""></p>
+<ol>
+<li>添加RGB特征</li>
+</ol>
+<p><img src="image-20210621095306051.png" alt=""></p>
+<ol>
+<li>基于边缘的PPF</li>
+</ol>
+<p><img src="image-20210621100427125.png" alt=""></p>
+<ol>
+<li>三维物体表面识别</li>
+</ol>
+<p><img src="image-20210621100443726.png" alt=""></p>
+<ol>
+<li>增强的位姿检索</li>
+</ol>
+<p><img src="image-20210621100531321.png" alt=""></p>
+<ol>
+<li>PPF-MEAM</li>
+</ol>
+<p>文章“Point Pair Feature-Based Pose Estimation with Multiple Edge Appearance Models (PPF-MEAM) for Robotic Bin Picking”</p>
+<p><img src="image-20210621112610994.png" alt=""></p>
+<h2 id="传统PPF算法"><a href="#传统PPF算法" class="headerlink" title="传统PPF算法"></a>传统PPF算法</h2><p>应用：3D点云6D位姿识别</p>
+<p>创新点：整体建模，局部匹配。<strong>Model Globally, Match Locally</strong></p>
+<h3 id="定义全局模型描述-Model-Globally"><a href="#定义全局模型描述-Model-Globally" class="headerlink" title="定义全局模型描述 Model Globally"></a>定义全局模型描述 Model Globally</h3><h4 id="离线建立ppf模型"><a href="#离线建立ppf模型" class="headerlink" title="离线建立ppf模型"></a>离线建立ppf模型</h4><p>在model模型点云中提取ppf特征集合。</p>
+<p>PPF特征公式</p>
+<p><img src="image-20210621102132921.png" alt=""></p>
+<p><img src="image-20210621102141833.png" alt=""></p>
+<p>包括点对距离，点法向量和点对矢量之间的夹角。<br>在模型表面采样了足够的点对ppf后，将这些特征写入哈希表，特征为键，点对(集)为值。</p>
+<p><img src="image-20210621102226282.png" alt=""></p>
+<h3 id="局部匹配-Match-Locally"><a href="#局部匹配-Match-Locally" class="headerlink" title="局部匹配 Match Locally"></a>局部匹配 Match Locally</h3><p>当定义好全局模型描述（Global Model Description）后，就可以考虑局部匹配了。</p>
+<p>依据：</p>
+<h4 id="局部坐标系-Local-Coordinates"><a href="#局部坐标系-Local-Coordinates" class="headerlink" title="局部坐标系 Local Coordinates"></a><strong>局部坐标系 Local Coordinates</strong></h4><p><img src="image-20210621103028451.png" alt=""></p>
+<p><img src="image-20210621103118002.png" alt=""></p>
+<p>处理思路：</p>
+<p><img src="image-20210621103233931.png" alt=""></p>
+<p><img src="image-20210621103430904.png" alt=""></p>
+<p><img src="image-20210621103457840.png" alt=""></p>
+<p><img src="image-20210621105433563.png" alt=""></p>
+<h4 id="广义霍夫投票方法-Voting-Scheme"><a href="#广义霍夫投票方法-Voting-Scheme" class="headerlink" title="广义霍夫投票方法 Voting Scheme"></a><strong>广义霍夫投票方法 Voting Scheme</strong></h4><p>前面我们定义了 local coordinates，现在只需要通过一种方法找到最优的 local coordinates 使得 scene 中落在 model 表面的点最多，即可求出物体 pose。</p>
+<p><img src="image-20210621104614047.png" alt=""></p>
+<p>具体实现：</p>
+<p><img src="image-20210621105537516.png" alt=""></p>
+<p><img src="image-20210621105624759.png" alt=""></p>
+<p><img src="image-20210621110042947.png" alt=""></p>
+<p><img src="image-20210621110132445.png" alt=""></p>
+<h4 id="投票速度优化-Efficient-Voting-Loop"><a href="#投票速度优化-Efficient-Voting-Loop" class="headerlink" title="投票速度优化 Efficient Voting Loop"></a>投票速度优化 <strong>Efficient Voting Loop</strong></h4><p><img src="image-20210621110403657.png" alt=""></p>
+<h4 id="位姿聚类-Pose-Clustering"><a href="#位姿聚类-Pose-Clustering" class="headerlink" title="位姿聚类 Pose Clustering"></a>位姿聚类 <strong>Pose Clustering</strong></h4><p><img src="image-20210621110532932.png" alt=""></p>
+<h3 id="参考代码与解释"><a href="#参考代码与解释" class="headerlink" title="参考代码与解释"></a>参考代码与解释</h3><h3 id="opencv实现"><a href="#opencv实现" class="headerlink" title="opencv实现"></a>opencv实现</h3><p><a target="_blank" rel="noopener" href="https://github.com/opencv/opencv_contrib/tree/master/modules/surface_matching">opencv传统PPF实现</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.opencv.org/3.0-beta/modules/surface_matching/doc/surface_matching.html">文档说明</a></p>
+<h3 id="关键代码说明"><a href="#关键代码说明" class="headerlink" title="关键代码说明"></a>关键代码说明</h3><ol>
+<li>算子使用</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pc is the loaded point cloud of the model</span></span><br><span class="line"><span class="comment">// (Nx6) and pcTest is a loaded point cloud of</span></span><br><span class="line"><span class="comment">// the scene (Mx6)</span></span><br><span class="line"><span class="function">ppf_match_3d::PPF3DDetector <span class="title">detector</span><span class="params">(<span class="number">0.03</span>, <span class="number">0.05</span>)</span></span>;</span><br><span class="line">detector.<span class="built_in">trainModel</span>(pc);</span><br><span class="line">vector&lt;Pose3DPtr&gt; results;</span><br><span class="line">detector.<span class="built_in">match</span>(pcTest, results, <span class="number">1.0</span>/<span class="number">10.0</span>, <span class="number">0.05</span>);</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;Poses: &quot;</span> &lt;&lt; endl;</span><br><span class="line"><span class="comment">// print the poses</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">size_t</span> i=<span class="number">0</span>; i&lt;results.<span class="built_in">size</span>(); i++)</span><br><span class="line">&#123;</span><br><span class="line">    Pose3DPtr pose = results[i];</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Pose Result &quot;</span> &lt;&lt; i &lt;&lt; endl;</span><br><span class="line">    pose-&gt;<span class="built_in">printPose</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>PPF3DDetector 类的学习</li>
+</ol>
+<p>初始化</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">PPF3DDetector::<span class="built_in">PPF3DDetector</span>()</span><br><span class="line">&#123;</span><br><span class="line">  sampling_step_relative = <span class="number">0.05</span>;<span class="comment">//模型相对采样步长</span></span><br><span class="line">  distance_step_relative = <span class="number">0.05</span>;<span class="comment">//模型相对采样距离</span></span><br><span class="line">  scene_sample_step = (<span class="keyword">int</span>)(<span class="number">1</span>/<span class="number">0.04</span>);<span class="comment">//场景采样步长</span></span><br><span class="line">  angle_step_relative = <span class="number">30</span>;<span class="comment">//角度细分度</span></span><br><span class="line">  angle_step_radians = (<span class="number">360.0</span>/angle_step_relative)*M_PI/<span class="number">180.0</span>;</span><br><span class="line">  angle_step = angle_step_radians;</span><br><span class="line">  trained = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  hash_table = <span class="literal">NULL</span>;</span><br><span class="line">  hash_nodes = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">setSearchParams</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PPF3DDetector::<span class="built_in">PPF3DDetector</span>(<span class="keyword">const</span> <span class="keyword">double</span> RelativeSamplingStep, <span class="keyword">const</span> <span class="keyword">double</span> RelativeDistanceStep, <span class="keyword">const</span> <span class="keyword">double</span> NumAngles)</span><br><span class="line">&#123;</span><br><span class="line">  sampling_step_relative = RelativeSamplingStep;</span><br><span class="line">  distance_step_relative = RelativeDistanceStep;</span><br><span class="line">  angle_step_relative = NumAngles;</span><br><span class="line">  angle_step_radians = (<span class="number">360.0</span>/angle_step_relative)*M_PI/<span class="number">180.0</span>;</span><br><span class="line">  <span class="comment">//SceneSampleStep = 1.0/RelativeSceneSampleStep;</span></span><br><span class="line">  angle_step = angle_step_radians;</span><br><span class="line">  trained = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">  hash_table = <span class="literal">NULL</span>;</span><br><span class="line">  hash_nodes = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">setSearchParams</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PPF3DDetector::setSearchParams</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> positionThreshold, <span class="keyword">const</span> <span class="keyword">double</span> rotationThreshold, <span class="keyword">const</span> <span class="keyword">bool</span> useWeightedClustering)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (positionThreshold&lt;<span class="number">0</span>)</span><br><span class="line">    position_threshold = sampling_step_relative;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    position_threshold = positionThreshold;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (rotationThreshold&lt;<span class="number">0</span>)</span><br><span class="line">    rotation_threshold = ((<span class="number">360</span>/angle_step) / <span class="number">180.0</span> * M_PI);</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    rotation_threshold = rotationThreshold;</span><br><span class="line"></span><br><span class="line">  use_weighted_avg = useWeightedClustering;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><ol>
+<li>sampling_step_relative</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sampling_step_relative <span class="comment">//相对采样步长 RelativeSamplingStep</span></span><br><span class="line"><span class="comment">//如果将RelativeSamplingStep设置为0.05，并且模型的直径为1米（1000毫米），则从对象表面采样的点将相距大约50毫米</span></span><br><span class="line"><span class="comment">//从另一个角度来看，如果采样相对采样步长设置为0.05，则最多生成20x20x20=8000个模型点（取决于模型如何填充体积）。</span></span><br><span class="line"><span class="comment">//因此，最多产生8000x8000对 点对。</span></span><br><span class="line"><span class="comment">//实际上模型分布不均，所有点会少一些    </span></span><br><span class="line"><span class="comment">//减小此值将得到更多的模型点，从而获得更精确的表示</span></span><br><span class="line"><span class="comment">//通常，范围在0.025到0.05之间的值对于大多数应用程序来说是足够的，其中默认值是0.03。</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>对模型做去离群点滤波</p>
+<p><img src="image-20210621120707001.png" alt=""></p>
+</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">从模型中去除异常值并在最初准备一个理想模型是非常明智的。这是因为，离群点的存在直接影响了相关计算，降低了匹配精度。</span><br></pre></td></tr></table></figure>
+<ol>
+<li>scene_sample_step 场景采样步长</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对场景点云也要根据 采样步长进行采样，此部分由RelativeSceneSampleStep控制</span></span><br><span class="line"><span class="comment">//其中Scene Sample Step=（int）（1.0/RelativeSceneSampleStep）</span></span><br><span class="line"><span class="comment">//换言之，如果RelativeSceneSampleStep=1.0/5.0，子采样场景将再次均匀采样到点数的1/5。</span></span><br><span class="line"><span class="comment">//此参数的最大值为1，增加此参数也会增加稳定性，但会降低速度。同样，由于初始场景独立的相对采样，微调此参数不是一个大问题。</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>relative Instance Step 充当哈希表上的离散化步骤</li>
+</ol>
+<p>点对特征被映射到哈希表的buckets 中。调整relative Instance Step，会调整hashtable的冲突。理论上冲突越多，精度越低。</p>
+<p>减小此参数会增加量化的影响，但会开始将不相似的点对分配给相同的箱子。然而，增加它，会削弱对相似的分组能力。</p>
+<p><strong>一般来说，由于在采样阶段，训练模型点的选择是一致的，距离由Relative Sampling Step控制，因此Relative Distance Step应该等于这个值。</strong></p>
+<p>同样，在0.025-0.05范围内的值是合理的。但这一次，当模型密集时，不建议减小该值。对于有噪声的场景，可以通过增加该值来提高匹配对噪声点的鲁棒性。</p>
+<h2 id="Opencv-源码翻译"><a href="#Opencv-源码翻译" class="headerlink" title="Opencv 源码翻译"></a>Opencv 源码翻译</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __OPENCV_SURFACE_MATCHING_PPF_MATCH_3D_HPP__</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __OPENCV_SURFACE_MATCHING_PPF_MATCH_3D_HPP__</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;pose_3d.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;t_hash_int.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> cv</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">namespace</span> ppf_match_3d</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//! @addtogroup surface_matching</span></span><br><span class="line"><span class="comment">//! @&#123;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief Struct, holding a node in the hashtable</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">THash</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="keyword">int</span> id;</span><br><span class="line">  <span class="keyword">int</span> i, ppfInd;</span><br><span class="line">&#125; THash;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief Class, allowing the load and matching 3D models.</span></span><br><span class="line"><span class="comment">  * Typical Use:</span></span><br><span class="line"><span class="comment">  * @code</span></span><br><span class="line"><span class="comment">  * // Train a model</span></span><br><span class="line"><span class="comment">  * ppf_match_3d::PPF3DDetector detector(0.05, 0.05);</span></span><br><span class="line"><span class="comment">  * detector.trainModel(pc);</span></span><br><span class="line"><span class="comment">  * // Search the model in a given scene</span></span><br><span class="line"><span class="comment">  * vector&lt;Pose3DPtr&gt; results;</span></span><br><span class="line"><span class="comment">  * detector.match(pcTest, results, 1.0/5.0,0.05);</span></span><br><span class="line"><span class="comment">  * @endcode</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CV_EXPORTS_W</span> <span class="title">PPF3DDetector</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * \brief Empty constructor. Sets default arguments</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function">CV_WRAP <span class="title">PPF3DDetector</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Constructor with arguments 带参数的构造函数</span></span><br><span class="line"><span class="comment">    * @param [in] relativeSamplingStep Sampling distance relative to the object&#x27;s diameter. Models are first sampled uniformly in order to improve efficiency. Decreasing this value leads to a denser model, and a more accurate pose estimation but the larger the model, the slower the training. Increasing the value leads to a less accurate pose computation but a smaller model and faster model generation and matching. Beware of the memory consumption when using small values.</span></span><br><span class="line"><span class="comment">    * 模型采样步长。为了提高效率，首先对模型进行均匀采样。减小此值将导致模型更密集，并且姿势估计更精确，但模型越大，训练越慢。增加该值会导致姿势计算的精度降低，但模型更小，模型生成和匹配更快。使用小值时要小心内存消耗。</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    * @param [in] relativeDistanceStep The discretization distance of the point pair distance relative to the model&#x27;s diameter. This value has a direct impact on the hashtable. Using small values would lead to too fine discretization, and thus ambiguity in the bins of hashtable. Too large values would lead to no discrimination over the feature vectors and different point pair features would be assigned to the same bin. This argument defaults to the value of RelativeSamplingStep. For noisy scenes, the value can be increased to improve the robustness of the matching against noisy points.</span></span><br><span class="line"><span class="comment">    * 模型采样步长 ppf点对间距与模型最大直径的比值？对哈希表生成有直接影响。过小会导致国度离散化，导致hash表中bin的模糊，过大会无法区分特征向量，不同的点对特征将会分配到一个bin中。此参数默认与RelativeSamplingStep相同，对于有噪声的场景，可以通过增加该值来提高匹配对噪声点的鲁棒性。</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    * @param [in] numAngles Set the discretization of the point pair orientation as the number of subdivisions of the angle. This value is the equivalent of RelativeDistanceStep for the orientations. Increasing the value increases the precision of the matching but decreases the robustness against incorrect normal directions. Decreasing the value decreases the precision of the matching but increases the robustness against incorrect normal directions. For very noisy scenes where the normal directions can not be computed accurately, the value can be set to 25 or 20.</span></span><br><span class="line"><span class="comment">    * 角度分支，用于设置ppf方向，设置模型采样步长relativeDistanceStep的方向。提高该值，会增加匹配精度，同时降低针对不正确正常方向的稳健性。降低值会降低匹配的精度，但会提高针对不正确正常方向的鲁棒性。对于无法准确计算正常方向的非常嘈杂的场景，值可以设置为 25 或 20</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="function">CV_WRAP <span class="title">PPF3DDetector</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> relativeSamplingStep, <span class="keyword">const</span> <span class="keyword">double</span> relativeDistanceStep=<span class="number">0.05</span>, <span class="keyword">const</span> <span class="keyword">double</span> numAngles=<span class="number">30</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">PPF3DDetector</span>();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    *  Set the parameters for the search</span></span><br><span class="line"><span class="comment">    *  @param [in] positionThreshold Position threshold controlling the similarity of translations. Depends on the units of calibration/model.</span></span><br><span class="line"><span class="comment">    * 匹配的位移阈值，取决于模型的实际的单位，如mm 。控制模型与场景之间所容忍的最大位移偏差？</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    *  @param [in] rotationThreshold Position threshold controlling the similarity of rotations. This parameter can be perceived as a threshold over the difference of angles</span></span><br><span class="line"><span class="comment">    * 旋转阈值，控制模型与场景之间所容忍的最大旋转偏差？</span></span><br><span class="line"><span class="comment">    *  @param [in] useWeightedClustering The algorithm by default clusters the poses without weighting. A non-zero value would indicate that the pose clustering should take into account the number of votes as the weights and perform a weighted averaging instead of a simple one.</span></span><br><span class="line"><span class="comment">    * 在将pose进行聚类时，是否考虑以投票数作为权重，并进行加权平均，而不是简单的平均值。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">setSearchParams</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> positionThreshold=<span class="number">-1</span>, <span class="keyword">const</span> <span class="keyword">double</span> rotationThreshold=<span class="number">-1</span>, <span class="keyword">const</span> <span class="keyword">bool</span> useWeightedClustering=<span class="literal">false</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    *  \brief Trains a new model.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    *  @param [in] Model The input point cloud with normals (Nx6)</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    *  \details Uses the parameters set in the constructor to downsample and learn a new model. When the model is learnt, the instance gets ready for calling &quot;match&quot;.</span></span><br><span class="line"><span class="comment">    * 模型训练</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="function">CV_WRAP <span class="keyword">void</span> <span class="title">trainModel</span><span class="params">(<span class="keyword">const</span> Mat&amp; Model)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">    *  \brief Matches a trained model across a provided scene.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    *  @param [in] scene Point cloud for the scene 输入场景点云</span></span><br><span class="line"><span class="comment">    *  @param [out] results List of output poses 位姿集合</span></span><br><span class="line"><span class="comment">    *  @param [in] relativeSceneSampleStep The ratio of scene points to be used for the matching after sampling with relativeSceneDistance. For example, if this value is set to 1.0/5.0, every 5th point from the scene is used for pose estimation. This parameter allows an easy trade-off between speed and accuracy of the matching. Increasing the value leads to less points being used and in turn to a faster but less accurate pose computation. Decreasing the value has the inverse effect.</span></span><br><span class="line"><span class="comment">    * 用于匹配的场景点比例，增加值会导致使用较少的点，进而导致更快但更不准确的姿势计算。降低值具有反作用。</span></span><br><span class="line"><span class="comment">    *  @param [in] relativeSceneDistance Set the distance threshold relative to the diameter of the model. This parameter is equivalent to relativeSamplingStep in the training stage. This parameter acts like a prior sampling with the relativeSceneSampleStep parameter.</span></span><br><span class="line"><span class="comment">    * 设置相对于模型直径的距离阈值（采样距离）。此参数相当于培训阶段的相对采样步长。增加值会导致使用较少的点，进而导致更快但更不准确的姿势计算。降低值具有反作用。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="function">CV_WRAP <span class="keyword">void</span> <span class="title">match</span><span class="params">(<span class="keyword">const</span> Mat&amp; scene, CV_OUT std::vector&lt;Pose3DPtr&gt; &amp;results, <span class="keyword">const</span> <span class="keyword">double</span> relativeSceneSampleStep=<span class="number">1.0</span>/<span class="number">5.0</span>, <span class="keyword">const</span> <span class="keyword">double</span> relativeSceneDistance=<span class="number">0.03</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">read</span><span class="params">(<span class="keyword">const</span> FileNode&amp; fn)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">write</span><span class="params">(FileStorage&amp; fs)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">  <span class="keyword">double</span> angle_step, angle_step_radians, distance_step;</span><br><span class="line">  <span class="keyword">double</span> sampling_step_relative, angle_step_relative, distance_step_relative;</span><br><span class="line">  Mat sampled_pc, ppf;</span><br><span class="line">  <span class="keyword">int</span> num_ref_points;</span><br><span class="line">  hashtable_int* hash_table;</span><br><span class="line">  THash* hash_nodes;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">double</span> position_threshold, rotation_threshold;</span><br><span class="line">  <span class="keyword">bool</span> use_weighted_avg;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> scene_sample_step;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">clearTrainingModels</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">computePPFFeatures</span><span class="params">(<span class="keyword">const</span> Vec3d&amp; p1, <span class="keyword">const</span> Vec3d&amp; n1,</span></span></span><br><span class="line"><span class="params"><span class="function">                          <span class="keyword">const</span> Vec3d&amp; p2, <span class="keyword">const</span> Vec3d&amp; n2,</span></span></span><br><span class="line"><span class="params"><span class="function">                          Vec4d&amp; f)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">bool</span> <span class="title">matchPose</span><span class="params">(<span class="keyword">const</span> Pose3D&amp; sourcePose, <span class="keyword">const</span> Pose3D&amp; targetPose)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">clusterPoses</span><span class="params">(std::vector&lt;Pose3DPtr&gt;&amp; poseList, <span class="keyword">int</span> numPoses, std::vector&lt;Pose3DPtr&gt; &amp;finalPoses)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">bool</span> trained;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//! @&#125;</span></span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">// namespace ppf_match_3d</span></span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">// namespace cv</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/06/27/PPF%E7%AE%97%E6%B3%95%E8%AE%B2%E8%A7%A3/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PPF-%E7%82%B9%E4%BA%91%E4%BD%8D%E5%A7%BF%E5%8C%B9%E9%85%8D/" rel="tag">PPF 点云位姿匹配</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/31/%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            旋转矩阵学习
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/06/12/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">背包问题</div>
+      </a>
+    
+  </nav>
+
+  
+   
+    
+    <script src="https://cdn.staticfile.org/twikoo/1.4.18/twikoo.all.min.js"></script>
+    <div id="twikoo" class="twikoo"></div>
+    <script>
+        twikoo.init({
+            envId: ""
+        })
+    </script>
+ 
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020-2023
+        <i class="ri-heart-fill heart_icon"></i> cyg
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/hakelong_head.ico" alt="摸鱼且很菜blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">神秘链接</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i></p>
+  <div class="reward-box">
+    
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+ <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+  });
+
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for(i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js"></script>
+<script src="https://cdn.staticfile.org/mathjax/2.7.7/config/TeX-AMS-MML_HTMLorMML-full.js"></script>
+<script>
+  var ayerConfig = {
+    mathjax: true,
+  };
+</script>
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+
+<script src="/js/clickBoom1.js"></script>
+ 
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    <div id="music">
+    
+    
+    
+    <iframe frameborder="no" border="1" marginwidth="0" marginheight="0" width="200" height="52"
+        src="//music.163.com/outchain/player?type=2&id=33705474&auto=0&height=32"></iframe>
+</div>
+
+<style>
+    #music {
+        position: fixed;
+        right: 15px;
+        bottom: 0;
+        z-index: 998;
+    }
+</style>
+    
+    
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"kesyoban"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"rect":"opacity:0.7","log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>

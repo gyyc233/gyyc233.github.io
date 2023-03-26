@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta name="description" content="Over top clear mind" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>python 实现PCA |  摸鱼且很菜blog</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/penhuolong.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      <canvas class="fireworks"></canvas>
+      <style>
+        .fireworks {
+          position: fixed;
+          left: 0;
+          top: 0;
+          z-index: 99999;
+          pointer-events: none;
+        }
+      </style>
+      
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-python-实现PCA"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  python 实现PCA
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/06/03/python-%E5%AE%9E%E7%8E%B0PCA/" class="article-date">
+  <time datetime="2021-06-03T14:49:01.000Z" itemprop="datePublished">2021-06-03</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">1.7k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">6 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>Principal Component Analysis</p>
+<p>PCA 一种非监督学习，常被用于数据降维、有损数据压缩、特征抽取、数据可视化。它也被称为Karhunen-Loève变换。</p>
+<p>PCA的思想是将n维特征映射到k维空间上。k&lt;n，这k维特征是全新的正交特征，是重新构造出来的k维特征，而不是简单地从n维特征中去除其余n−k维特征。</p>
+<span id="more"></span>
+<h2 id="PCA算法流程"><a href="#PCA算法流程" class="headerlink" title="PCA算法流程"></a>PCA算法流程</h2><p>算法输入：数据集X-m*n </p>
+<ul>
+<li>按列计算数据集X的均值X-mean，然后令Xnew=X − Xmean；</li>
+<li>求解矩阵Xnew的协方差矩阵，并将其记为Cov；</li>
+<li>计算协方差矩阵Cov的特征值和相应的特征向量；</li>
+<li>将特征值按照从大到小的排序，选择其中最大的k个，然后将其对应的k个特征向量分别作为列向量组成特征向量矩阵W-n*k;</li>
+<li>计算XnewW，即将数据集Xnew投影到选取的特征向量上，这样就得到了我们需要的已经降维的数据集XnewW。</li>
+</ul>
+<p>注意，计算一个n*n矩阵的完整的特征向量分解的时间复杂度为 O(n3) 。如果我们将数据集投影到前 k 个主成分中，那么我们只需寻找前 kk个特征值和特征向量。这可以使用更高效的方法得到,例如幂方法(power method) (Golub and Van Loan, 1996)，它的时间复杂度为 O(kn2)，或者我们也可以使用 EM 算法。</p>
+<h2 id="PCA优缺点"><a href="#PCA优缺点" class="headerlink" title="PCA优缺点"></a>PCA优缺点</h2><p>优点：</p>
+<ul>
+<li><p>它是无监督学习，完全无参数限制的。在PCA的计算过程中完全不需要人为的设定参数或是根据任何经验模型对计算进行干预，最后的结果只与数据相关，与用户是独立的。</p>
+</li>
+<li><p>用PCA技术可以对数据进行降维，同时对新求出的“主元”向量的重要性进行排序，根据需要取前面最重要的部分，将后面的维数省去，可以达到降维从而简化模型或是对数据进行压缩的效果。同时最大程度的保持了原有数据的信息。</p>
+</li>
+<li><p>各主成分之间正交，可消除原始数据成分间的相互影响。</p>
+</li>
+<li><p>计算方法简单，易于在计算机上实现。</p>
+</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>如果用户对观测对象有一定的先验知识，掌握了数据的一些特征，却无法通过参数化等方法对处理过程进行干预，可能会得不到预期的效果，效率也不高。</li>
+<li>贡献率小的主成分往往可能含有对样本差异的重要信息。</li>
+<li>特征值矩阵的正交向量空间是否唯一有待讨论。</li>
+<li>在非高斯分布的情况下，PCA方法得出的主元可能并不是最优的，此时在寻找主元时不能将方差作为衡量重要性的标准。</li>
+</ul>
+<h2 id="Python-调用numpy-实现PCA"><a href="#Python-调用numpy-实现PCA" class="headerlink" title="Python 调用numpy 实现PCA"></a>Python 调用numpy 实现PCA</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">x=np.array([<span class="number">2.5</span>,<span class="number">0.5</span>,<span class="number">2.2</span>,<span class="number">1.9</span>,<span class="number">3.1</span>,<span class="number">2.3</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">1.5</span>,<span class="number">1.1</span>])</span><br><span class="line">y=np.array([<span class="number">2.4</span>,<span class="number">0.7</span>,<span class="number">2.9</span>,<span class="number">2.2</span>,<span class="number">3</span>,<span class="number">2.7</span>,<span class="number">1.6</span>,<span class="number">1.1</span>,<span class="number">1.6</span>,<span class="number">0.9</span>])</span><br><span class="line"><span class="comment"># s1 求平均值以及标准化 normalization</span></span><br><span class="line">mean_x=np.mean(x)</span><br><span class="line">mean_y=np.mean(y)</span><br><span class="line"><span class="comment"># 减去均值 为了数据特征标准化 </span></span><br><span class="line"><span class="comment"># 在图像处理中，常对图像 减去他的平均亮度，图像的整体明亮程度并不会影响图像中存在的是什么物体</span></span><br><span class="line">scaled_x=x-mean_x</span><br><span class="line">scaled_y=x-mean_y</span><br><span class="line"><span class="comment">#构造矩阵</span></span><br><span class="line">data=np.matrix([[scaled_x[i],scaled_y[i]] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(scaled_x))])</span><br><span class="line"></span><br><span class="line">plt.plot(scaled_x,scaled_y,<span class="string">&#x27;o&#x27;</span>)    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># s2 求协方差矩阵(Covariance Matrix)</span></span><br><span class="line">cov=np.cov(scaled_x,scaled_y)</span><br><span class="line"><span class="built_in">print</span>(cov,end=<span class="string">&quot;\n&quot;</span>)       </span><br><span class="line"></span><br><span class="line"><span class="comment"># 除了求协方差矩阵，还能求散度矩阵Scatter Matrix</span></span><br><span class="line"><span class="comment"># 由于我们之前已经做过normalization，因此对于我们来说，</span></span><br><span class="line"><span class="comment"># 这个矩阵就是 data*data的转置矩阵。</span></span><br><span class="line">scatter_matrix=np.dot(np.transpose(data),data)</span><br><span class="line"><span class="built_in">print</span>(scatter_matrix,end=<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 其实协方差矩阵和散度矩阵关系密切，散度矩阵 就是协方差矩阵乘以（总数据量-1）</span></span><br><span class="line"><span class="comment"># 因此他们的特征根和特征向量是一样的。这里值得注意的一点就是，</span></span><br><span class="line"><span class="comment"># 散度矩阵是SVD奇异值分解的一步，因此PCA和SVD是有很大联系的</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># s3 求协方差矩阵的特征根和特征向量</span></span><br><span class="line"><span class="comment"># 用numpy计算特征根eig_val和特征向量eig_vec</span></span><br><span class="line">eig_val, eig_vec = np.linalg.eig(cov)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;特征值&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(eig_val,end=<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;特征向量&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(eig_vec,end=<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">xmin ,xmax = scaled_x.<span class="built_in">min</span>(), scaled_x.<span class="built_in">max</span>()</span><br><span class="line">ymin, ymax = scaled_y.<span class="built_in">min</span>(), scaled_y.<span class="built_in">max</span>()</span><br><span class="line"></span><br><span class="line">dx = (xmax - xmin) * <span class="number">0.2</span></span><br><span class="line">dy = (ymax - ymin) * <span class="number">0.2</span></span><br><span class="line">plt.xlim(xmin - dx, xmax + dx)</span><br><span class="line">plt.ylim(ymin - dy, ymax + dy)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 其中红线、蓝线就是特征向量</span></span><br><span class="line">plt.plot([eig_vec[:,<span class="number">0</span>][<span class="number">0</span>],<span class="number">0</span>],[eig_vec[:,<span class="number">0</span>][<span class="number">1</span>],<span class="number">0</span>],color=<span class="string">&#x27;red&#x27;</span>)</span><br><span class="line">plt.plot([eig_vec[:,<span class="number">1</span>][<span class="number">0</span>],<span class="number">0</span>],[eig_vec[:,<span class="number">1</span>][<span class="number">1</span>],<span class="number">0</span>],color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意：</span></span><br><span class="line"><span class="comment"># 1.特征向量之间是正交的，PCA其实就是利用特征向量的这个特点，重新构建新的空间体系</span></span><br><span class="line"><span class="comment"># 2.特征向量代表着数据的pattern(模式),比如一条代表着y随着x的增大而增大的趋势，</span></span><br><span class="line"><span class="comment"># 而另外一条，则是代表数据也有该方面的变化。所以特征向量的命名是很科学的，他代表着矩阵的特征。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果我们将数据直接乘以特征向量矩阵，那么其实我们只是以特征向量为基底，重新构建了空间</span></span><br><span class="line">new_data=np.transpose(np.dot(eig_vec,np.transpose(data)))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;将数据投影到特征向量空间之后的值&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(new_data)</span><br><span class="line">plt.plot(new_data[:,<span class="number">0</span>],new_data[:,<span class="number">1</span>],<span class="string">&#x27;^&#x27;</span>,color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line"><span class="comment"># s4 得到特征值和特征向量之后，我们可以根据特征值的大小，从大到小的选择K个特征值对应的特征向量。</span></span><br><span class="line">eig_pairs = [(np.<span class="built_in">abs</span>(eig_val[i]), eig_vec[:,i]) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(eig_val))]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;排序前&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(eig_pairs)</span><br><span class="line">eig_pairs.sort(reverse=<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;排序后&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(eig_pairs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从eig_pairs选取前k个特征向量就行。这里，我们只有两个特征向量，选一个最大的。</span></span><br><span class="line">feature=eig_pairs[<span class="number">0</span>][<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># s5 转化得到降维的数据</span></span><br><span class="line"><span class="comment"># 将原来的数据乘以经过筛选的特征向量组成的特征矩阵之后，就可以得到新的数据</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;new data:&quot;</span>)</span><br><span class="line">new_data_reduced=np.transpose(np.dot(feature,np.transpose(data)))</span><br><span class="line"><span class="built_in">print</span>(new_data_reduced)</span><br><span class="line">plt.plot(new_data_reduced[:,<span class="number">0</span>],[<span class="number">1.2</span>]*<span class="number">10</span>,<span class="string">&#x27;*&#x27;</span>,color=<span class="string">&#x27;green&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment"># 绿色的五角星是PCA处理过后得到的一维数据，为了能跟以前的图对比，将他们的高度定位1.2，</span></span><br><span class="line"><span class="comment"># 其实就是红色圆点投影到蓝色线之后形成的点。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这就是PCA,通过选择特征根向量，形成新的坐标系，然后数据投影到这个新的坐标系，</span></span><br><span class="line"><span class="comment"># 在尽可能少的丢失信息的基础上实现降维</span></span><br></pre></td></tr></table></figure>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/06/03/python-%E5%AE%9E%E7%8E%B0PCA/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python-PCA/" rel="tag">Python PCA</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/06/12/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            背包问题
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/06/01/C-%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">C++中的函数指针</div>
+      </a>
+    
+  </nav>
+
+  
+   
+    
+    <script src="https://cdn.staticfile.org/twikoo/1.4.18/twikoo.all.min.js"></script>
+    <div id="twikoo" class="twikoo"></div>
+    <script>
+        twikoo.init({
+            envId: ""
+        })
+    </script>
+ 
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020-2023
+        <i class="ri-heart-fill heart_icon"></i> cyg
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/hakelong_head.ico" alt="摸鱼且很菜blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">神秘链接</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i></p>
+  <div class="reward-box">
+    
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+ <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+  });
+
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for(i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js"></script>
+<script src="https://cdn.staticfile.org/mathjax/2.7.7/config/TeX-AMS-MML_HTMLorMML-full.js"></script>
+<script>
+  var ayerConfig = {
+    mathjax: true,
+  };
+</script>
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<script src="https://cdn.staticfile.org/animejs/3.2.1/anime.min.js"></script>
+
+<script src="/js/clickBoom1.js"></script>
+ 
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    <div id="music">
+    
+    
+    
+    <iframe frameborder="no" border="1" marginwidth="0" marginheight="0" width="200" height="52"
+        src="//music.163.com/outchain/player?type=2&id=33705474&auto=0&height=32"></iframe>
+</div>
+
+<style>
+    #music {
+        position: fixed;
+        right: 15px;
+        bottom: 0;
+        z-index: 998;
+    }
+</style>
+    
+    
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"kesyoban"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"rect":"opacity:0.7","log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>
