@@ -13,7 +13,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Jacobi矩阵理解 |  摸鱼且很菜blog</title>
+      <title>了解GDB |  摸鱼且很菜blog</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/yu_head.gif" />
@@ -66,7 +66,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-Jacobi矩阵理解"
+  id="post-了解GDB"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -77,7 +77,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Jacobi矩阵理解
+  了解GDB
 </h1>
  
 
@@ -85,15 +85,15 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2023/03/26/Jacobi%E7%9F%A9%E9%98%B5%E7%90%86%E8%A7%A3/" class="article-date">
-  <time datetime="2023-03-26T14:05:39.000Z" itemprop="datePublished">2023-03-26</time>
+      <a href="/2023/04/02/%E4%BA%86%E8%A7%A3GDB/" class="article-date">
+  <time datetime="2023-04-02T15:25:39.000Z" itemprop="datePublished">2023-04-02</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">258</span>
+            <span class="post-count">680</span>
         </span>
     </span>
 
@@ -102,7 +102,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">2 分钟</span>
         </span>
     </span>
 </div>
@@ -117,40 +117,165 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>最近在看VINS-Mono，在imu预积分讲解时涉及到Jacobi矩阵，不明白其中的作用，今天来补一下。</p>
-<span id="more"></span>
-<h1 id="Jacobi矩阵"><a href="#Jacobi矩阵" class="headerlink" title="Jacobi矩阵"></a>Jacobi矩阵</h1><p>jacobi 矩阵只涉及一阶偏导</p>
-<p><img src="image-20230326223906360.png" alt="" style="zoom:33%;" /></p>
-<h2 id="定积分中的Jacobi矩阵"><a href="#定积分中的Jacobi矩阵" class="headerlink" title="定积分中的Jacobi矩阵"></a>定积分中的Jacobi矩阵</h2><p>在定积分中</p>
-<script type="math/tex; mode=display">
-\int_a^bf(x)dx\\
-若 x=h(y)\\
-有 \frac{dx}{dy}=h'(y)\\
-则dx=h'(y)dy</script><p>经过换元积分，有</p>
-<script type="math/tex; mode=display">
-\int_a^bf(x)dx=\int_c^df(h(y))h'(y)dy\\
-其中x=h(y)\\dx=h'(y)dy\\
-
-对于边界\\a=h(c)\\b=h(d)</script><p>称Jacobi矩阵 为</p>
-<script type="math/tex; mode=display">
-dx=Jdy</script><p>表示dx dy 之间长度的比值</p>
-<p><img src="image-20230326222029864.png" alt="" style="zoom:33%;" /></p>
-<h2 id="二重积分中的Jacobi矩阵"><a href="#二重积分中的Jacobi矩阵" class="headerlink" title="二重积分中的Jacobi矩阵"></a>二重积分中的Jacobi矩阵</h2><script type="math/tex; mode=display">
-\iint_Rf(x,y)dxdy</script><p>将(x,y)换成(u,v)</p>
-<script type="math/tex; mode=display">
-x=h(u,v)\\
-y=k(u,v)</script><p>换元积分</p>
-<script type="math/tex; mode=display">
-\iint_Rf(x,y)dxdy=\iint_Qf(h(u,v),k(u,v))|\frac{\partial(x,y)}{\partial(u,v)}|dudv</script><p>其中J为以下矩阵。</p>
-<p>行列式的值表示了dxdy 与 dudv的比值</p>
-<script type="math/tex; mode=display">
-|\frac{\partial(x,y)}{\partial(u,v)}|=|\begin{matrix}{\frac{\partial x}{\partial u}}&{\frac{\partial x}{\partial v}}\\{\frac{\partial y}{\partial u}}&{\frac{\partial y}{\partial v}}\\\end{matrix}|=
-
-\frac{\partial x}{\partial u}*\frac{\partial y}{\partial v}-\frac{\partial x}{\partial v}*\frac{\partial y}{\partial u}</script><p><img src="image-20230326223340783.png" alt="" style="zoom:33%;" /></p>
-<h3 id="实际计算"><a href="#实际计算" class="headerlink" title="实际计算"></a>实际计算</h3><p><img src="image-20230326223741023.png" alt="" style="zoom: 50%;" /></p>
-<p><img src="image-20230326223820419.png" alt="" style="zoom: 80%;" /></p>
-<p><img src="image-20230326224222933.png" alt="" style="zoom: 25%;" /></p>
-<p><img src="image-20230326224244094.png" alt="" style="zoom: 25%;" /></p>
+  <span id="more"></span>
+<p>GDB</p>
+<p>The GNU Project Debugger</p>
+<p><img src="image-20221126100721625.png" style="zoom: 67%;" /></p>
+<p>GDB支持哪些语言</p>
+<p><img src="image-20221126100903966.png" style="zoom:33%;" /></p>
+<blockquote>
+<p>gdb —version</p>
+</blockquote>
+<h2 id="基本命令与快速开始"><a href="#基本命令与快速开始" class="headerlink" title="基本命令与快速开始"></a>基本命令与快速开始</h2><p><img src="image-20221126101153860.png" style="zoom:67%;" /></p>
+<p>gcc 编译</p>
+<blockquote>
+<p>gcc test.c</p>
+</blockquote>
+<p>运行</p>
+<blockquote>
+<p>./a.out</p>
+</blockquote>
+<h3 id="添加调试选项"><a href="#添加调试选项" class="headerlink" title="添加调试选项"></a>添加调试选项</h3><blockquote>
+<p>gcc -g test.c</p>
+</blockquote>
+<p>运行</p>
+<blockquote>
+<p>gdb ./a.out</p>
+</blockquote>
+<p><img src="image-20221126101515673.png" style="zoom:67%;" /></p>
+<p>此时已经进入到gdb当中</p>
+<p>运行</p>
+<blockquote>
+<p>r 或者 run</p>
+</blockquote>
+<p>退出gdb模式</p>
+<blockquote>
+<p>quit</p>
+</blockquote>
+<h2 id="了解常用的十几种指令"><a href="#了解常用的十几种指令" class="headerlink" title="了解常用的十几种指令"></a>了解常用的十几种指令</h2><blockquote>
+<p>man gdb</p>
+</blockquote>
+<h3 id="打断点"><a href="#打断点" class="headerlink" title="打断点"></a>打断点</h3><ul>
+<li><p>在某个函数前打断点</p>
+<ul>
+<li><blockquote>
+<p>b main （在main函数前打断点）b:break</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>在某一行打断点</p>
+<ul>
+<li><blockquote>
+<p>b 9 (在第九行打断点)</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>删除断点</p>
+<ul>
+<li>可以使用 clear 或者 delete 命令进行删除</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(gdb) clear location</span><br><span class="line"></span><br><span class="line">// 参数 location 通常为某一行代码的行号或者某个具体的函数名。当 location 参数为某个函数的函数名时，表示删除位于该函数入口处的所有断点。</span><br><span class="line">ex:</span><br><span class="line">clear hello_world.cc:8</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用delete</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">delete [breakpoints] [num]</span><br><span class="line">// breakpoints 参数可有可无，num 参数为指定断点的编号，可以使用`info b`获取index，其可以是 delete 删除某一个断点，而非全部。</span><br></pre></td></tr></table></figure>
+<h3 id="查看源代码"><a href="#查看源代码" class="headerlink" title="查看源代码"></a>查看源代码</h3><blockquote>
+<p>list</p>
+</blockquote>
+<p><img src="image-20221126101922333.png" style="zoom:67%;" /></p>
+<h4 id="获取断点相关信息"><a href="#获取断点相关信息" class="headerlink" title="获取断点相关信息"></a>获取断点相关信息</h4><blockquote>
+<p>info b</p>
+</blockquote>
+<p><img src="image-20221126102048601.png" style="zoom:67%;" /></p>
+<p>在有断点的情况下运行</p>
+<blockquote>
+<p>r</p>
+</blockquote>
+<p><img src="image-20221126102138498.png" style="zoom:67%;" /></p>
+<p>发现断点生效</p>
+<h3 id="单步调试"><a href="#单步调试" class="headerlink" title="单步调试"></a>单步调试</h3><blockquote>
+<p>n (next)</p>
+</blockquote>
+<p><img src="image-20221126102221403.png" style="zoom:67%;" /></p>
+<h3 id="打印变量信息-print"><a href="#打印变量信息-print" class="headerlink" title="打印变量信息 print"></a>打印变量信息 print</h3><p><img src="image-20221126102459625.png" style="zoom:67%;" /></p>
+<p>此时，想查看数组里面的值，变量的地址</p>
+<p>print p</p>
+<blockquote>
+<p>p arr[0]</p>
+</blockquote>
+<p><img src="image-20221126102640344.png" style="zoom:67%;" /></p>
+<h3 id="走进某个函数-step"><a href="#走进某个函数-step" class="headerlink" title="走进某个函数 step"></a>走进某个函数 step</h3><p><img src="image-20221126102858453.png" style="zoom:67%;" /></p>
+<p><img src="image-20221126102923955.png" style="zoom:67%;" /></p>
+<p>发现程序跳到第4行，进入到这个函数中，再继续运行</p>
+<p><img src="image-20221126103032043.png" style="zoom:67%;" /></p>
+<p><img src="image-20221126103926639.png" style="zoom:67%;" /></p>
+<h2 id="GDB的一些技巧"><a href="#GDB的一些技巧" class="headerlink" title="GDB的一些技巧"></a>GDB的一些技巧</h2><h3 id="通过shell-调用终端的命令"><a href="#通过shell-调用终端的命令" class="headerlink" title="通过shell 调用终端的命令"></a>通过shell 调用终端的命令</h3><p><img src="image-20221126104027737.png" style="zoom:67%;" /></p>
+<h3 id="日志功能"><a href="#日志功能" class="headerlink" title="日志功能"></a>日志功能</h3><blockquote>
+<p>set logging  on</p>
+</blockquote>
+<p>日志输出到gdb.txt</p>
+<p><img src="image-20221126104323737.png" style="zoom:67%;" /></p>
+<h3 id="watch-point-观察点"><a href="#watch-point-观察点" class="headerlink" title="watch point 观察点"></a>watch point 观察点</h3><p>观察变量是否发生变化</p>
+<p>比如循环变量i ，将i的地址设置成 watch point</p>
+<p><img src="image-20221126104702751.png" style="zoom:67%;" /></p>
+<p><img src="image-20221126104805063.png" style="zoom:67%;" /></p>
+<p><img src="image-20221126104835167.png" style="zoom: 67%;" /></p>
+<p>变量发生了变化</p>
+<p><img src="image-20221126104854625.png" style="zoom:67%;" /></p>
+<h3 id="catch-point-捕捉点"><a href="#catch-point-捕捉点" class="headerlink" title="catch point 捕捉点"></a>catch point 捕捉点</h3><p>捕捉异常点</p>
+<h3 id="check-point-快照"><a href="#check-point-快照" class="headerlink" title="check point 快照"></a>check point 快照</h3><h2 id="调试程序"><a href="#调试程序" class="headerlink" title="调试程序"></a>调试程序</h2><p>往往调试的是core文件，而不是二进制文件</p>
+<ul>
+<li>调试一个正在运行的进程</li>
+</ul>
+<h3 id="调试core文件"><a href="#调试core文件" class="headerlink" title="调试core文件"></a>调试core文件</h3><p><img src="image-20221126105301847.png" style="zoom:67%;" /></p>
+<p><img src="image-20221126105327932.png" style="zoom:67%;" /></p>
+<p>segmentation fault 发生了段错误</p>
+<p>访问了非法内存</p>
+<p>查看core相关的内容</p>
+<ul>
+<li>core文件不会自动生成，shell做了一些限制</li>
+</ul>
+<blockquote>
+<p>man ulimit</p>
+<p>ulimit -a</p>
+</blockquote>
+<p><img src="image-20221126105719882.png" style="zoom:67%;" /></p>
+<p>修改core文件大小限制 <code>core file size</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -c unlimited</span><br></pre></td></tr></table></figure>
+<p><img src="image-20221126105946472.png" style="zoom:67%;" /></p>
+<p><img src="image-20221126110002459.png" style="zoom:67%;" /></p>
+<p>发现core file size 已被修改</p>
+<ul>
+<li>然后再运行<code>./a.out</code></li>
+<li>发现有个core dumped，同时生成了core文件<code>core.19761</code></li>
+</ul>
+<p><img src="image-20221126110037031.png" style="zoom:67%;" /></p>
+<h4 id="根据core文件查看，为何程序挂掉"><a href="#根据core文件查看，为何程序挂掉" class="headerlink" title="根据core文件查看，为何程序挂掉"></a>根据core文件查看，为何程序挂掉</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdb ./a.out core.19761</span><br></pre></td></tr></table></figure>
+<p><img src="image-20221126110205314.png" style="zoom:67%;" /></p>
+<p>里面说，再第七行<code>*temp=10</code>报错 段错误</p>
+<p>找到了发生段错误的地方</p>
+<h2 id="查询man手册"><a href="#查询man手册" class="headerlink" title="查询man手册"></a>查询man手册</h2><h3 id="如何调试一个正在运行的进程"><a href="#如何调试一个正在运行的进程" class="headerlink" title="如何调试一个正在运行的进程"></a>如何调试一个正在运行的进程</h3><ul>
+<li>通过进程号访问</li>
+<li>查询程序进程号</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./a.out &amp;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>gdb通过进程号访问程序</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdb -p [process-id]</span><br></pre></td></tr></table></figure>
+<p><img src="image-20221126110746683.png" style="zoom:67%;" /></p>
+<p><img src="image-20221126110811939.png" style="zoom:67%;" /></p>
+<p>让这个程序后台执行。返回一个进程号。</p>
+<ul>
+<li>通过进程号访问正在运行的进程</li>
+</ul>
+<p><img src="image-20221126110928310.png" style="zoom:67%;" /></p>
+<p><img src="image-20221126111030491.png" style="zoom:67%;" /></p>
+<p><img src="image-20221126111212331.png" style="zoom:67%;" /></p>
  
       <!-- reward -->
       
@@ -215,12 +340,12 @@ y=k(u,v)</script><p>换元积分</p>
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2023/03/26/Jacobi%E7%9F%A9%E9%98%B5%E7%90%86%E8%A7%A3/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2023/04/02/%E4%BA%86%E8%A7%A3GDB/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag">线性代数</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GDB/" rel="tag">GDB</a></li></ul>
 
     </footer>
   </div>
@@ -228,19 +353,10 @@ y=k(u,v)</script><p>换元积分</p>
    
   <nav class="article-nav">
     
-      <a href="/2023/04/02/%E4%BA%86%E8%A7%A3GDB/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            了解GDB
-          
-        </div>
-      </a>
     
-    
-      <a href="/2022/12/18/ros-catkin%E7%BC%96%E8%AF%91%E7%B3%BB%E7%BB%9F/" class="article-nav-link">
+      <a href="/2023/03/26/Jacobi%E7%9F%A9%E9%98%B5%E7%90%86%E8%A7%A3/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">ros_catkin编译系统</div>
+        <div class="article-nav-title">Jacobi矩阵理解</div>
       </a>
     
   </nav>
